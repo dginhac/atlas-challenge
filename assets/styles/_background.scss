@@ -1,0 +1,89 @@
+/* Addons for background */
+
+.bg-size-cover {
+  background-size: cover !important
+}
+
+.bg-size-contain {
+  background-size: contain !important
+}
+
+.bg-position-center {
+  background-position: center !important
+}
+
+.bg-position-center-y {
+  background-position: left center !important
+}
+
+.bg-position-center-x {
+  background-position: center top !important
+}
+
+.bg-position-top-end {
+  background-position: top right !important
+}
+
+.bg-position-top-start {
+  background-position: top left !important
+}
+
+.bg-position-top-center {
+  background-position: top center !important
+}
+
+.bg-position-center-end {
+  background-position: center right !important
+}
+
+.bg-position-center-start {
+  background-position: center left !important
+}
+
+.bg-position-center-bottom {
+  background-position: center bottom !important
+}
+
+.bg-position-bottom-end {
+  background-position: bottom right !important
+}
+
+.bg-position-bottom-start {
+  background-position: bottom left !important
+}
+
+.bg-position-bottom-center {
+  background-position: bottom center !important
+}
+
+.bg-repeat-0 {
+  background-repeat: no-repeat !important
+}
+
+.bg-repeat-x {
+  background-repeat: repeat-x !important
+}
+
+.bg-repeat-y {
+  background-repeat: repeat-y !important
+}
+
+.bg-attachment-fixed {
+  background-attachment: fixed !important
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important
+}
+
+.bg-gradient-primary-translucent {
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0) 0%, rgba(99, 102, 241, 0.6) 120%) !important
+}
+
+.bg-gradient-dark-translucent {
+  background: linear-gradient(180deg, rgba(11, 15, 25, 0.58) 0%, rgba(11, 15, 25, 0.78) 100%) !important
+}
+
+.bg-image-none {
+  background-image: none !important
+}

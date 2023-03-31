@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+
+{% block body %}
+    <main class="vh-100 vw-100 text-white">
+        <!-- Page content -->
+        <section class="position-relative h-100">
+            <div class="d-flex flex-wrap justify-content-start h-100 w-50" >
+                <div class="align-self-center text-center p-5">
+                    <a href="https://conferences.miccai.org/2023/en/default.asp" target="_new">
+                        <img src="{{ asset('build/images/miccai2023-logo.png') }}" alt="logo" class="img-fluid bg-white"
+                             style="max-width: 300px">
+                    </a>
+                    <h1 class="display-1 fw-bold lh-1 mt-5 mb-5">ATLAS <br> <span class="fst-italic display-3">MICCAI challenge</span> </h1>
+                    <h2 class="mb-3 text-danger">Under construction</h2>
+                    <p class="lead fw-normal text-white mb-5">We are working hard to finish the development of this
+                        site.</p>
+
+                    <p class="p-5 fs-6 text-white-50 d-none d-lg-block">
+                        Abstract: Liver cancer is the sixth most common cancer in the world and the fourth leading cause of cancer
+                        mortality. In unresectable liver cancers, especially hepatocellular carcinoma (HCC),
+                        transarterial radioembolization (TARE) can be considered for treatment. TARE treatment involves
+                        a contrastenhanced magnetic resonance imaging (CE-MRI) exam performed beforehand to visualize
+                        and delineate the tumours and the whole liver. Due to the high level of expertise required to
+                        acquire and delineate medical imaging data, very few datasets are publicly available, which
+                        hinders the development of supervised machine and deep learning based solutions such as
+                        automatic segmentation. The "A Tumor and Liver Automatic Segmentation" (ATLAS) dataset consists
+                        of 90 liver-focused CE-MRI acquisitions from 90 patients with unresectable HCC encompassing the
+                        entire liver along with 90 liver and liver tumour segmentation masks. To the best of our
+                        knowledge, the ATLAS dataset is the first dataset providing CE-MRI of HCC acquisitions with
+                        annotations.
+                    </p>
+
+                </div>
+
+            </div>
+            <!-- Background -->
+            <div class="position-absolute top-0 end-0 w-50 h-100 100vh bg-position-center bg-repeat-0 bg-size-cover d-none d-lg-block"
+                 style="background-image: url({{ asset('build/images/bg01.jpg') }});"></div>
+        </section>
+    </main>
+{% endblock %}
