@@ -1,4 +1,4 @@
-FROM php:8.1.12-apache
+FROM php:8.2.4-apache
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
@@ -39,5 +39,8 @@ RUN echo "mailhub=maildev" >> /etc/ssmtp/ssmtp.conf
 
 # Set up php sendmail config
 RUN echo "sendmail_path=sendmail -i -t" >> /usr/local/etc/php/conf.d/php-sendmail.ini
+
+RUN apt-get install -y supervisor
+COPY conf/messenger-worker.conf /etc/supervisor/conf.d/
 
 WORKDIR /var/www/

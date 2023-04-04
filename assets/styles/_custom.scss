@@ -1,7 +1,15 @@
 
-/* Bleu Gretsi */
+// Colors
 $dark-black: #090e0f;
 
-body {
-  background-color: $dark-black;
+.opacity-10 {
+  opacity: 0.1;
+}
+
+.ps-10 {
+  padding-left: 10rem;
+}
+
+.pe-10 {
+  padding-right: 10rem;
 }

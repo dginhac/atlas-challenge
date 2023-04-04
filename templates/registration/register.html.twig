@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <main class="vh-100 vw-100">
+        <section class="position-relative h-100">
+            <div class="d-flex flex-wrap justify-content-center h-100 w-50 ps-10 pe-5" >
+                <div class="align-self-center p-5">
+                    {% for flash_error in app.flashes('verify_email_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    {% endfor %}
+
+                    <h1 class="mb-3">Create your Atlas account ...</h1>
+                    <p class="lead ">with only <span class="text-primary">an e-mail</span>,
+                        a <span class="text-primary">secure password</span> ...
+                        <br> It's free and only <span class="text-primary">takes a minute.</span>
+                    </p>
+
+                    <div class="alert alert-warning mb-5 " >
+                            Only institutional emails are authorized to create an account.
+                            A manual validation step of the email address will be performed by the Atlas challenge
+                            organizers before giving access to the dataset.
+                    </div>
+                    {{ form_start(registrationForm, {
+                        'attr': {
+                            'novalidate': 'novalidate',
+                            'class':'needs-validation'
+                        }
+                    }) }}
+{#
+                    <h2 class="alert-heading">Your identity</h2>
+                    <hr class="opacity-10">
+                    {{ form_row(registrationForm.firstname) }}
+                    {{ form_row(registrationForm.lastname) }}
+#}
+                    <h2 class="alert-heading">Your username</h2>
+                    <hr class="opacity-10">
+                    {{ form_row(registrationForm.email) }}
+                    {{ form_row(registrationForm.plainPassword) }}
+
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="fas fa-check"></i>
+                        Submit !
+                    </button>
+                    {{ form_end(registrationForm) }}
+                </div>
+
+            </div>
+            <!-- Background -->
+            <div class="position-absolute top-0 end-0 w-50 h-100 100vh bg-position-center bg-repeat-0 bg-size-cover d-none d-lg-block"
+                 style="background-image: url({{ asset('build/images/bg-register.jpg') }});"></div>
+        </section>
+
+
+
+
+
+
+    </main>
+
+
+{% endblock %}
