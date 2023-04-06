@@ -51,9 +51,10 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
-                    ->to($user->getEmail())
-                    ->subject('Atlas Challenge: Please Confirm your Email')
+                    ->to('dginhac@u-bourgogne.fr')
+                    ->subject('Atlas Challenge: Please confirm the new account.')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context(['user' => $user])
             );
 
             // do anything else you need here, like send an email
@@ -67,8 +68,11 @@ class RegistrationController extends AbstractController
                 ->context(['user' => $user, 'signedUrl' => $signedUrl]);
             $mailer->send($email);
 */
-
-            $this->addFlash('success', 'Your email address has been verified.');
+            $this->addFlash(
+                'success',
+                'Your account ' . $user->getEmail() . ' has been created. As soon as it is validated by 
+                one of the challenge organizers, you will receive an email indicating that you can login.'
+            );
             //return $this->redirectToRoute('under_construction');
         }
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block body %}
     <main class="vh-100 vw-100">
@@ -11,8 +11,11 @@
                         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
                     {% endfor %}
 
-                    <h1 class="mb-3">Create your Atlas account ...</h1>
-                    <p class="lead ">with only <span class="text-primary">an e-mail</span>,
+                    {% include 'partials/_flash.html.twig' %}
+
+                    <h1 class="text-uppercase fs-6 fw-bold text-primary">Atlas Challenge</h1>
+                    <h2 class="text-uppercase fs-1 fw-bold mb-5">Sign up ...</h2>
+                    <p class="lead ">... with only <span class="text-primary">an e-mail</span>,
                         a <span class="text-primary">secure password</span> ...
                         <br> It's free and only <span class="text-primary">takes a minute.</span>
                     </p>
@@ -20,7 +23,7 @@
                     <div class="alert alert-warning mb-5 " >
                             Only institutional emails are authorized to create an account.
                             A manual validation step of the email address will be performed by the Atlas challenge
-                            organizers before giving access to the dataset.
+                            organizers before giving full access to the dataset.
                     </div>
                     {{ form_start(registrationForm, {
                         'attr': {
@@ -28,22 +31,22 @@
                             'class':'needs-validation'
                         }
                     }) }}
-{#
-                    <h2 class="alert-heading">Your identity</h2>
-                    <hr class="opacity-10">
-                    {{ form_row(registrationForm.firstname) }}
-                    {{ form_row(registrationForm.lastname) }}
-#}
-                    <h2 class="alert-heading">Your username</h2>
-                    <hr class="opacity-10">
+
                     {{ form_row(registrationForm.email) }}
+
                     {{ form_row(registrationForm.plainPassword) }}
 
-                    <button type="submit" class="btn btn-success mt-3">
+                    <button type="submit" class="btn btn-primary shadow-primary btn-lg w-100 mt-5">
                         <i class="fas fa-check"></i>
-                        Submit !
+                        Sign up
                     </button>
                     {{ form_end(registrationForm) }}
+                    <div class="mt-5 text-center text-xl-end">
+                        <p>
+                            Or <a href="{{ path('app_login') }}">Log in to your account !</a><br>
+                            <a href="{{ path('app_login') }}">Forgotten password ?</a>
+                        </p>
+                    </div>
                 </div>
 
             </div>
@@ -51,12 +54,6 @@
             <div class="position-absolute top-0 end-0 w-50 h-100 100vh bg-position-center bg-repeat-0 bg-size-cover d-none d-lg-block"
                  style="background-image: url({{ asset('build/images/bg-register.jpg') }});"></div>
         </section>
-
-
-
-
-
-
     </main>
 
 

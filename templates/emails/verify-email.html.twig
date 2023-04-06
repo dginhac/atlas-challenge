@@ -1,0 +1,12 @@
+<h1>Hi! Please confirm that the email!</h1>
+
+<p>
+    A new user has created an account with the following email address :
+    Is this an institutional address?
+    <a href="{{ signedUrl|raw }}">yes</a>.
+    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+</p>
+
+<p>
+    Cheers!
+</p>
