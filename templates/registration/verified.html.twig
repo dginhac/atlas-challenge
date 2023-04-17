@@ -11,7 +11,9 @@
                 {{ user.email }} is now registered. <br>
                 An automatic email has been set to {{ user.email }} with CC to you.
             </p>
-            <a href="{{ path('app_home') }}" class="btn btn-primary mb-5">Go Home</a>
+            <p>
+                <a href="{{ path('app_home') }}" class="btn btn-primary mb-5">Go Home</a>
+            </p>
             <img src ="{{ asset('build/images/yes.jpg') }}" class="img-fluid">
         </div>
     </div>
