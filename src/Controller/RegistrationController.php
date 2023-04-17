@@ -47,27 +47,25 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            // generate a signed url and email it to the administrator
+            $this->emailVerifier->sendEmailConfirmation('app_verify', $user,
                 (new TemplatedEmail())
                     ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
                     ->to('dginhac@u-bourgogne.fr')
                     ->subject('Atlas Challenge: Please confirm the new account.')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('emails/admin/confirm-account.html.twig')
                     ->context(['user' => $user])
             );
 
-            // do anything else you need here, like send an email
-/*
-            $signedUrl = "google.fr";
-            $email = new TemplatedEmail();
-            $email->from('dginhac@u-bourgogne.fr')
+            // Send an email to the user
+            $email = (new TemplatedEmail())
+                ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
                 ->to($user->getEmail())
-                ->subject("ATLAS - Création de votre compte")
-                ->htmlTemplate('registration/confirmation_email2.html.twig')
-                ->context(['user' => $user, 'signedUrl' => $signedUrl]);
+                ->subject('Atlas Challenge: Your account is awaiting validation.')
+                ->htmlTemplate('emails/account-is-waiting-for-validation.html.twig')
+                ->context(['user' => $user]);
             $mailer->send($email);
-*/
+
             $this->addFlash(
                 'success',
                 'Your account ' . $user->getEmail() . ' has been created. As soon as it is validated by 
@@ -81,17 +79,21 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
+    #[Route('/verify', name: 'app_verify')]
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $id = $request->get('id');
         if (null === $id) {
-            return $this->redirectToRoute('app_register');
+            return $this->render('errors/registration.html.twig', [
+                'error_msg' => 'No user id is provided. Unable to validate the account.',
+            ]);
         }
 
         $user = $userRepository->find($id);
         if (null === $user) {
-            return $this->redirectToRoute('app_register');
+            return $this->render('errors/registration.html.twig', [
+                'error_msg' => 'The account does not exist. Unable to validate it.',
+            ]);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
@@ -100,12 +102,28 @@ class RegistrationController extends AbstractController
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
-            return $this->redirectToRoute('app_register');
+            return $this->render('errors/registration.html.twig', [
+                'error_msg' => $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'),
+            ]);
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
+        // Send an email to the user
+        $email = (new TemplatedEmail())
+            ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
+            ->to($user->getEmail())
+            ->addCc('dginhac@u-bourgogne.fr')
+            ->subject('Atlas Challenge: Your account is validated.')
+            ->htmlTemplate('emails/account-is-validated.html.twig')
+            ->context(['user' => $user]);
+        $mailer->send($email);
+
+
+
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_login');
+        return $this->render('registration/verified.html.twig', [
+            'user' => $user,
+        ]);
     }
+
 }
