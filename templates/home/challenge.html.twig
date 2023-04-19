@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block nav %}
+    {{ include('partials/_nav.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    <main class="page-wrapper">
+        <section id="header" class="bg-white border-bottom border-dark border-opacity-25">
+            <img src="{{ asset('build/images/challenge.jpg') }}" class="img-fluid w-100" alt="">
+        </section>
+        <section id="participate" class="bg-body-tertiary pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h2 class="display-3 underline mb-3">How to participate ?</h2>
+                        <p class="mb-2">
+                            <a href="{{ path('app_login') }}">Registered</a> participants must provide one of the two following documents:
+                        </p>
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item bg-body-tertiary"> A technical report detailing their method</li>
+                            <li class="list-group-item bg-body-tertiary">A paper detailing their report submitted to the
+                                <a href="https://miccai-remia.github.io/">REMIA</a>
+                            </li>
+                        </ul>
+                        <p class="mb-2">
+                            Participants with submitted articles to the REMIA workshop and technical
+                            reports will be guaranteed to be cited in the future paper resuming the ATLAS challenge.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="docker" class="bg-white pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 order-lg-2 p-5">
+                        <h2 class="underline mb-3">Using docker containers</h2>
+                        <p class="mb-2">
+                            Each submitted Docker container to the challenge should include a CPU inference
+                            option to prevent driver compatibility issues and memory constraints. Additionally,
+                            to optimize inference speed using gpu, we suggest providing containers allowing to
+                            run the inference using the following environment:
+                        </p>
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item">GPU: NVIDAI TESLA V100 32GB VRAM, single GPU</li>
+                            <li class="list-group-item">RAM: 32 GB</li>
+                            <li class="list-group-item">GPU DRIVER: NVIDIA-DRIVER Version 470.103.01</li>
+                        </ul>
+                        <p class="mb-2">
+                            To prevent cross-cheating, we will disable the internet connection during running time.
+                        </p>
+                        <p class="mb-2">
+                            It is the participant’s responsibility to create a development environment
+                            and other prerequisites besides GPU drivers, such as Conda, PyTorch, CUDA,
+                            CUDNN, and other tools.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 order-lg-1 img-bg img-h-20" style="background-image: url('{{ asset('build/images/container.jpg') }}');">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section id="metrics" class="bg-body-secondary pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8  p-5">
+                        <h2 class="underline mb-3">Metrics</h2>
+                        <p class="mb-2">
+                            Evaluation of the algorithms will be done on the test set using the provided docker
+                            container by the participants. Five different metrics will be used:
+                        </p>
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item bg-body-secondary">The average dice per structure</li>
+                            <li class="list-group-item bg-body-secondary">The 3mm surface Dice</li>
+                            <li class="list-group-item bg-body-secondary">The Average symmetric surface distance</li>
+                            <li class="list-group-item bg-body-secondary">The Hausdorff distance</li>
+                            <li class="list-group-item bg-body-secondary">The Root Mean Square Error on tumor burden calculation </li>
+                        </ul>
+                        <p class="mb-2">
+                            Every metric except for the tumor burden will be calculated twice, once for the liver
+                            and once for the tumor. The code that allows metric calculations is provided with
+                            the dataset.
+                        <p>
+                        <p class="mb-2">
+                            Rank-then-aggregate voting system over the nine scores obtained by the
+                            participants will be used to compute the ranking.
+                        </p>
+                    </div>
+                    <div class="col-lg-4  img-bg img-h-20" style="background-image: url('{{ asset('build/images/metrics.jpg') }}');">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

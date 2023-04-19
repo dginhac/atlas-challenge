@@ -15,23 +15,27 @@
                 <h1 class="text-uppercase fs-6 fw-bold text-primary">Atlas Challenge</h1>
                 <h2 class="text-uppercase fs-1 fw-bold mb-5">Log in ...</h2>
 
-                <div class="alert alert-warning mb-5 " >
-                    You can only log in if your account has been validated by one of the challenge organizers.
-                </div>
+                {% if app.user %}
+                    <p class="alert alert-warning mb-5 mt-5" role="alert">
+                        You are already connected as
+                        <span class="text-highlight">{{ app.user.userIdentifier }}</span>, <br>
+                        <a href="{{ path('app_home') }}">Go homepage</a> or
+                        <a href="{{ path('app_logout') }}">Log out!</a>
+                    </p>
+                {% else %}
+                    <div class="alert alert-warning mb-5 " >
+                        You can only log in if your account has been validated by one of the challenge organizers.
+                    </div>
+
+
+
 
                 <form action="{{ path('app_login') }}" method="post" class="mt-5 mb-5 needs-validation" novalidate>
                     {% if error %}
                         <p class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
                     {% endif %}
 
-                    {% if app.user %}
-                        <p class="alert alert-warning mb-5 mt-5" role="alert">
-                            You are already connectd as
-                            <span class="text-highlight">{{ app.user.userIdentifier }}</span>, <br>
-                            <a href="{{ path('app_login') }}">Your account</a> ou
-                            <a href="{{ path('app_logout') }}">Log out!</a>
-                        </p>
-                    {% endif %}
+
 
                     <div class="form-floating mb-3">
                         <input type="email" value="{{ last_username }}" name="_username" id="inputEmail"
@@ -61,6 +65,7 @@
                         <a href="{{ path('app_login') }}">Forgotten password ?</a>
                     </p>
                 </div>
+                {% endif %}
             </div>
             <!-- Background -->
             <div class="col-6-lg w-50 h-100 bg-position-center bg-repeat-0 bg-size-cover d-none d-lg-block"

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+{% set route_name = app.request.attributes.get('_route') %}
+
 <html>
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>Atlas - {% block title %}Welcome!{% endblock %}</title>
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
@@ -19,7 +21,15 @@
         {% endblock %}
     </head>
     <body>
+        {% block nav %}
+        {% endblock %}
+
+        {% block header %}
+        {% endblock %}
+
         {% block body %}
         {% endblock %}
+
+        {% include 'partials/_footer.html.twig' %}
     </body>
 </html>

@@ -2,24 +2,51 @@
 // Colors
 $dark-black: #090e0f;
 
+.page-wrapper {
+  flex: 1 0 auto;
+}
+
+
+.underline {
+  margin-bottom: 2rem;
+  padding: 5px 0 8px;
+  position: relative;
+}
+
+
+.underline:after {
+  border-bottom: 3px solid $primary;
+  bottom: 2px;
+  content: "";
+  height: 0px;
+  position: absolute;
+  left: 0px;
+  width: 5rem;
+}
+
 .opacity-10 {
   opacity: 0.1;
 }
 
-.ps-10 {
-  padding-left: 10rem !important
-}
 
-.pe-10 {
-  padding-right: 10rem !important
-}
 
-@media (min-width: 992px) {
-  .ps-lg-10 {
-    padding-left: 10rem !important
-  }
-  .pe-lg-10 {
-    padding-right: 10rem !important
+.avatar {
+  max-width: 128px;
+  max-height: 128px;
+  border-radius: 50%;
+
+  &.avatar-medium {
+    max-width: 64px;
+    max-height: 64px;
   }
 
+  &.avatar-mini {
+    max-width: 24px;
+    max-height: 24px;
+  }
+
+  &.avatar-micro {
+    max-width: 20px;
+    max-height: 20px;
+  }
 }

@@ -2,11 +2,245 @@
 
 {% block title %} {{ title }} {% endblock %}
 
+{% block nav %}
+    {{ include('partials/_nav.html.twig') }}
+{% endblock %}
 
 {% block body %}
-    <div class="d-flex align-items-center justify-content-center">
-        <div class="text-center">
-            <h1 class="display-1 fw-bold mt-5">Home sweet home!</h1>
-        </div>
-    </div>
+    <main class="page-wrapper ">
+        <section id="header" class="bg-body-secondary border-bottom border-dark border-opacity-25">
+            <div class="container-fluid bg-dark text-white">
+                <div class="row">
+                    <div class="col-lg-6 col-xl-5 order-2 order-lg-1 text-center text-xxl-end align-self-center ps-3 ps-xl-5 pe-3 pe-xl-5">
+                        <h1 class="text-primary display-4 fw-bold mb-3 mt-3">A Tumor and Liver
+                            Automatic Segmentation</h1>
+                        <h2 class="text-uppercase display-2 fw-bold">Atlas challenge</h2>
+                        <p class="lead mt-5 text-light text-opacity-75">The goal of this challenge is to produce automatic segmentation maps
+                            of the liver and tumor(s) using contrast-enhanced MRI.</p>
+                        <a class="btn btn-lg btn-primary shadow-primary mt-5 mt-xl-10 mb-5 "
+                           href="{{ path('app_challenge') }}" role="button">Enter the challenge ...
+                        </a>
+                    </div>
+                    <div class="col-lg-6 col-xl-7 order-1 order-lg-2 mb-3 mb-sm-2 mb-md-0 img-bg img-h-50"
+                         style="background-image: url('{{ asset('build/images/mri.jpg') }}');">
+                    </div>
+                </div>
+            </div>
+            <div class="container text-black mt-5 mb-5">
+                <div class="row justify-content-center ">
+                    <div class="col">
+                        <h2 class="underline mb-2">Latest News</h2>
+                        <div class="alert alert-primary m-2" role="alert">
+                            <p>
+                                Refer to the following citation for any use of the <b>ATLAS datasets</b>:
+                            </p>
+                            {% include 'partials/_data-paper.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="introduction" class="bg-white pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h2 class="underline mb-2">The ATLAS challenge at a glance </h2>
+                        <p class="fst-italic mb-4">Keywords: MRI; liver; liver tumors; TARE; hepatocellular carcinoma </p>
+
+                        <p class="mb-2">
+                            The ATLAS challenge is organized in collaboration with the
+                            <a href="https://miccai-remia.github.io/">REMIA2 workshop</a>
+                            which will take part during the
+                            <a href="https://conferences.miccai.org/2023/en/">MICCAI 2023</a>
+                            edition in Vancouver, Canada.</p>
+                        <p class="mb-2">
+                            Liver cancer is the sixth most common cancer in the world and the fourth leading cause of cancer
+                            mortality. In unresectable liver cancers, especially hepatocellular carcinoma (HCC),
+                            transarterial radioembolization (TARE) can be considered for treatment. TARE treatment involves
+                            a contrast-enhanced magnetic resonance imaging (CE-MRI) exam performed beforehand to delineate
+                            the liver and tumor(s) which is used to perform dosimetry calculation. Due to the significant
+                            amount of time and expertise required by the delineation process, there is a high degree of
+                            desirability for automation.
+                        </p>
+                        <blockquote class="blockquote ms-3 me-3 ps-3 border-start border-3 border-primary mt-4 mb-4">
+                            <p>
+                                The objective of the "A Tumor and Liver Automatic Segmentation" (ATLAS) challenge is to
+                                produce automatic segmentation maps of liver and the tumor(s) using the provided CE-MRI.
+                                The use of external dataset or pre-trained models during the training process are authorized
+                                if the used datasets/models are publicly available.
+                            </p>
+                        </blockquote>
+                        <h3 class="underline mt-5 mb-3">Dataset </h3>
+                        <p class="mb-2">
+                            The dataset comprises 90 T1 CE-MRI scans of the liver from 90 patients with unresectable HCC,
+                            along with 90 liver and liver tumor segmentation masks divided into train and test sets with
+                            60 and 30 patients per set, respectively. All cases in the dataset are pathological. </p>
+                        <p>
+                            The dataset includes variations in image resolution, contrast phase, MRI sequence, and MRI
+                            manufacturer, making it more representative of real-world clinical scenarios. Thus, the image
+                            resolution, contrast phase, MRI sequence, and MRI manufacturer for each image are also
+                            provided. </p>
+                        <p>
+                            Further details regarding the dataset are available in the
+                            <a href="{{ path('app_dataset') }}">Dataset section </a> and in
+                            the following paper (link to the paper tbd).
+                        </p>
+                        <h3 class="underline mt-5 mb-2">Registration</h3>
+                        <p class="mb-2">
+                            To participate in the ATLAS challenge, participants must
+                            <a href="{{ path('app_register') }}">create an account </a>
+                            using a <strong>valid institutional email address</strong>. </p>
+                        <p>
+                            Once their address is validated,
+                            participants can access and download the train set in the Dataset section.
+                        </p>
+                        <h3 class="underline mt-5 mb-3">Submission</h3>
+                        <p class="mb-2">
+                            Submissions to the ATLAS challenge will be done using Docker containers. The container
+                            should allow to take a CE-MRI image as input and return a segmentation map of the liver and
+                            tumor(s) in the initial resolution of the image as output.</p>
+                        <p>
+                            Participants should also provide a mandatory technical report detailing their methods and
+                            are encouraged to submit an article to the
+                            <a href="https://miccai-remia.github.io/">REMIA workshop</a>
+                            before the fixed deadline.</p>
+                        <p>
+                            Each participant is authorized to submit twice their algorithms. The best performance over
+                            the two submissions will be retained.
+                            The details of the submission's conditions are provided in the
+                            <a href="{{ path('app_challenge') }}">How to participate</a> section
+                            along with a docker container example.
+                        </p>
+                        <h3 class="underline mt-5 mb-3">Evaluation</h3>
+                        <p class="mb-2">
+                            Evaluation of the algorithms will be done on the test set using the provided docker
+                            container by the participants. Five different metrics will be used:
+                        </p>
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item">The average dice per structure</li>
+                            <li class="list-group-item">The 3mm surface Dice</li>
+                            <li class="list-group-item">The Average symmetric surface distance</li>
+                            <li class="list-group-item">The Hausdorff distance</li>
+                            <li class="list-group-item">The Root Mean Square Error on tumor burden calculation </li>
+                        </ul>
+                        <p class="mb-2">
+                            Every metric except for the tumor burden will be calculated twice, once for the liver
+                            and once for the tumor. The code that allows metric calculations is provided with
+                            the dataset.
+                        <p>
+                        <p class="mb-2">
+                            Rank-then-aggregate voting system over the nine scores obtained by the
+                            participants will be used to compute the ranking.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dates" class="bg-body-secondary pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 order-lg-2 p-lg-5">
+                        <h2 class="underline mb-3">Important dates</h2>
+                        <p class="mb-2">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-body-secondary">Registration opening:
+                                <span class="text-primary">14 April 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Release of the training cases:
+                                <span class="text-primary ">21 April 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Opening of the docker submission process and short reports:
+                                <span class="text-primary">30 April 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Opening of the paper submissions process:
+                                <span class="text-primary">to be determined</span></li>
+                            <li class="list-group-item bg-body-secondary">Closing of the paper submission process:
+                                <span class="text-primary">15 July 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Closing of the docker submission process and short reports:
+                                <span class="text-primary">August 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Contact of the most performing methods for an oral presentation
+                                during the workshop:
+                                <span class="text-primary">August 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Challenge results presentation at REMIA workshop:
+                                <span class="text-primary">October 2023</span></li>
+                            <li class="list-group-item bg-body-secondary">Closing of the website and test set release:
+                                <span class="text-primary">December 2025</span></li>
+                        </ul>
+
+                        </p>
+                    </div>
+                    <div class="col-lg-5 order-lg-1 img-bg img-h-30"
+                         style="background-image: url('{{ asset('build/images/calendar2.jpg') }}');">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="bg-white pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 pt-lg-5 pb-lg-5 pe-lg-5">
+                        <h2 class="underline mb-3">Organizing team</h2>
+                        <p class="lead mb-0">
+                            Primary contact person:
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a href="mailto:sarah.leclerc" class="fs-4">Sarah Leclerc</a>, <br>
+                                    Institut de Chimie Moléculaire de l’Université de Bourgogne, Dijon, FR
+                                </li>
+                            </ul>
+                        </p>
+
+                        <p class="lead mb-0">
+                            Other members of the team:
+                        </p>
+                        <p class="mb-2">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a href="mailto:felix.quinton@u-bourgogne.fr">Felix Quinton</a>,
+                                    ICMUB, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:rpopoff@cgfl.fr">Romain Popoff</a>,
+                                    ICMUB,
+                                    CGFL, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:benoit.presles@u-bourgogne.fr">Benoît Presles</a>,
+                                    ICMUB, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:fabrice.meriaudeau@u-bourgogne.fr">Fabrice Meriaudeau</a>,
+                                    ICMUB, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:gnodari@cgfl.fr">Guillaume Nodari</a>,
+                                    CGFL, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:olivier.lopez@chu-dijon.fr">Olivier Lopez</a>,
+                                    CGFL, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:jpellegrinelli@cgfl.fr">Julie Pellegrinelli</a>,
+                                    CGFL, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:olivier.chevallier@chu-dijon.fr">Olivier Chevallier</a>,
+                                    CHU, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:dominique.ginhac@u-bourgogne.fr">Dominique Ginhac</a>,
+                                    Laboratoire Imagerie et Vision Artificielle, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:jmvrigneaud@cgfl.fr">Jean-Marc Vrigneaud</a>,
+                                    ICMUB,
+                                    CGFL, Dijon, FR </li>
+                                <li class="list-group-item">
+                                    <a href="mailto:jean-louis.alberini@u-bourgogne.fr">Jean-Louis Alberini</a>,
+                                    ICMUB,
+                                    CGFL, CHU, Dijon, FR</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="col-lg-5 img-bg img-h-30"
+                         style="background-image: url('{{ asset('build/images/team2.jpg') }}');">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
 {% endblock %}
