@@ -51,8 +51,9 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->sendEmailConfirmation('app_verify', $user,
                 (new TemplatedEmail())
                     ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
-                    ->to('dginhac@u-bourgogne.fr')
+                    ->to('atlas-challenge-l@u-bourgogne.fr')
                     ->subject('Atlas Challenge: Please confirm the new account.')
+                    ->textTemplate('emails/admin/confirm-account.txt.twig')
                     ->htmlTemplate('emails/admin/confirm-account.html.twig')
                     ->context(['user' => $user])
             );
@@ -62,6 +63,7 @@ class RegistrationController extends AbstractController
                 ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
                 ->to($user->getEmail())
                 ->subject('Atlas Challenge: Your account is awaiting validation.')
+                ->textTemplate('emails/account-is-waiting-for-validation.txt.twig')
                 ->htmlTemplate('emails/account-is-waiting-for-validation.html.twig')
                 ->context(['user' => $user]);
             $mailer->send($email);
@@ -96,6 +98,12 @@ class RegistrationController extends AbstractController
             ]);
         }
 
+        if ($user->isVerified()) {
+            return $this->render('errors/registration.html.twig', [
+                'error_msg' => 'The account is already validated.',
+            ]);
+        }
+
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
@@ -106,18 +114,16 @@ class RegistrationController extends AbstractController
                 'error_msg' => $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'),
             ]);
         }
-
         // Send an email to the user
         $email = (new TemplatedEmail())
             ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
             ->to($user->getEmail())
-            ->addCc('dginhac@u-bourgogne.fr')
+            ->addCc('atlas-challenge-l@u-bourgogne.fr')
             ->subject('Atlas Challenge: Your account is validated.')
+            ->textTemplate('emails/account-is-validated.txt.twig')
             ->htmlTemplate('emails/account-is-validated.html.twig')
             ->context(['user' => $user]);
         $mailer->send($email);
-
-
 
         $this->addFlash('success', 'Your email address has been verified.');
 
@@ -125,5 +131,4 @@ class RegistrationController extends AbstractController
             'user' => $user,
         ]);
     }
-
 }

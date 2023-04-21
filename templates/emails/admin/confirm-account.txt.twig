@@ -1,0 +1,9 @@
+Hi!
+A new account with the email address {{ user.email }} has been created.
+
+If this email is valid, copy/paste the link at the bottom of this message to confirm the account.
+If the email address is not valid, you can skip this message.
+
+{{ signedUrl|raw }}
+
+This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
