@@ -16,13 +16,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/dataset', name: 'app_dataset')]
-    public function dataset(): Response
-    {
-        return $this->render('home/dataset.html.twig', [
-            'title' => 'Dataset'
-        ]);
-    }
+
 
     #[Route('/challenge', name: 'app_challenge')]
     public function challenge(): Response

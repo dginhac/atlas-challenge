@@ -11,24 +11,49 @@
         <section id="header" class="bg-white border-bottom border-dark border-opacity-25">
             <img src="{{ asset('build/images/dataset.jpg') }}" class="img-fluid w-100" alt="">
         </section>
-        <section id="download" class="bg-body-tertiary pt-5 pb-5 border-bottom border-dark border-opacity-25">
+        <section id="download" class="bg-body-secondary pt-5 pb-5 border-bottom border-dark border-opacity-25">
             <div class="container">
                 <div class="row ">
                     <div class="col-12">
                         <h2 class="display-3 underline mb-3">Get the ATLAS dataset</h2>
                         {% if app.user %}
-                            Connected as {{ app.user.email }}
-                        {% else %}
-                        <div class="alert alert-warning m-2" role="alert">
                             <p class="mb-2">
-                                The datasets are available for download to <a href="{{ path('app_login') }}">
-                                    registered users</a> under
-                                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">
-                                    CC BY-NC-SA 4.0 license
-                                </a>
-                                (Attribution-NonCommercial-ShareAlike).
+                                Participants must agree to comply with the terms of
+                                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">CC BY-NC-SA 4.0</a>
+                                license, and also agree to the specific terms:
                             </p>
-                        </div>
+                            <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                                <li class="list-group-item bg-body-secondary border-secondary-subtle">
+                                    The ATLAS dataset is available as free to use
+                                    strictly only non-commercial scientific research purposes,</li>
+                                <li class="list-group-item bg-body-secondary border-secondary-subtle">
+                                    Participants must use the following citation when referencing
+                                    the EMIDEC datasets.<br>
+                                    {% include 'partials/_data-paper.html.twig' %}
+                                </li>
+                            </ul>
+                            <div class="alert alert-primary " role="alert">
+                                <div class="custom-control custom-checkbox mt-2 mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="AgreeTermsForDataset">
+                                    <label class="custom-control-label" for="AgreeTermsForDataset">Agree to the terms of
+                                        the CC BY-NC-SA 4.0 license and the EMIDEC terms and commit to cite the
+                                        challenge and the article presenting the dataset.</label>
+                                </div>
+
+
+                                <form action="{{ path('app_dataset_download') }}">
+                                    <button type="submit" class="btn btn-lg btn-primary" id="downloadDataset" disabled>
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </form>
+                            </div>
+
+                        {% else %}
+                            <p class="mb-3">
+                                The datasets are only available for download by
+                                <a href="{{ path('app_login') }}">registered</a> users.
+                            </p>
+                            <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Log in / Sign up</a>
                         {% endif %}
                     </div>
                 </div>
@@ -75,11 +100,13 @@
                         <p class="mb-2">
                             The overall dataset is divided in two sets:
                         </p>
-                        <ul>
-                            <li>A training set of 60 patients acquired from 2012 to 2020 containing 60 images
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item bg-body-secondary border-secondary-subtle">
+                            A training set of 60 patients acquired from 2012 to 2020 containing 60 images
                                 along with the 60 corresponding labels for liver and tumor under nifty format.
                             </li>
-                            <li>A testing set of 30 patients acquired from 2020 to 2023 containing 30 images
+                            <li class="list-group-item bg-body-secondary border-secondary-subtle">A testing set of
+                                30 patients acquired from 2020 to 2023 containing 30 images
                                 along with the 30 corresponding labels for liver and tumor under nifty format.
                             </li>
                         </ul>

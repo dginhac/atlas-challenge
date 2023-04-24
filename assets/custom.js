@@ -14,4 +14,10 @@
             }, false)
         })
 
+    // Check if the user has accepted the terms and conditions for downloading the dataset
+    let AgreeTermsForDataset = document.getElementById('AgreeTermsForDataset');
+    let downloadDataset = document.getElementById('downloadDataset');
+    AgreeTermsForDataset.addEventListener('click', function () {
+        downloadDataset.disabled = !downloadDataset.disabled;
+    })
 })();

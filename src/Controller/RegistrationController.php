@@ -73,7 +73,11 @@ class RegistrationController extends AbstractController
                 'Your account ' . $user->getEmail() . ' has been created. As soon as it is validated by 
                 one of the challenge organizers, you will receive an email indicating that you can login.'
             );
-            //return $this->redirectToRoute('app_under_construction');
+
+            return $this->render('login/login.html.twig', [
+                'last_username' => $user->getEmail(),
+                'error' => null,
+            ]);
         }
 
         return $this->render('registration/register.html.twig', [

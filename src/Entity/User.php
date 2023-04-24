@@ -41,6 +41,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $dataset = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -164,6 +167,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (empty($this->isVerified)) {
             $this->setIsVerified(false);
         }
+
+        if (empty($this->dataset)) {
+            $this->setDataset(false);
+        }
+
         $this->setRoles(['ROLE_USER']);
+    }
+
+    public function isDataset(): ?bool
+    {
+        return $this->dataset;
+    }
+
+    public function setDataset(?bool $dataset): self
+    {
+        $this->dataset = $dataset;
+
+        return $this;
     }
 }
