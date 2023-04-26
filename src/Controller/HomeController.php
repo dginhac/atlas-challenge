@@ -8,15 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_under_construction')]
-    public function underConstruction(): Response
+
+    #[Route('/', name: 'app_home')]
+    public function index(): Response
     {
-        return $this->render('home/under-construction.html.twig', [
+        return $this->render('home/index.html.twig', [
             'title' => 'Welcome to the atlas challenge'
         ]);
     }
-
-
 
     #[Route('/challenge', name: 'app_challenge')]
     public function challenge(): Response
@@ -26,12 +25,12 @@ class HomeController extends AbstractController
         ]);
     }
 
-
-    #[Route('/beta', name: 'app_home')]
-    public function index(): Response
+    #[Route('/under_construction', name: 'app_under_construction')]
+    public function underConstruction(): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('home/under-construction.html.twig', [
             'title' => 'Welcome to the atlas challenge'
         ]);
     }
+
 }
