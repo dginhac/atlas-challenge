@@ -15,3 +15,4 @@ import { Tooltip, Toast, Popover } from 'bootstrap';
 
 // start the Stimulus application
 import './bootstrap';
+import '@fortawesome/fontawesome-free/js/all.js';
