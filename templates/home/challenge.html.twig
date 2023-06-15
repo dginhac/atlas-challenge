@@ -20,14 +20,14 @@
                             <a href="{{ path('app_login') }}">Registered</a> participants must provide one of the two following documents:
                         </p>
                         <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
-                            <li class="list-group-item bg-body-tertiary"> A technical report detailing their method</li>
-                            <li class="list-group-item bg-body-tertiary">A paper detailing their report submitted to the
+                            <li class="list-group-item bg-body-tertiary"> A technical report detailing their method provided along with the docker container</li>
+                            <li class="list-group-item bg-body-tertiary">A submission to the REMIA workshop of a paper detailing their report
                                 <a href="https://miccai-remia.github.io/">REMIA</a>
                             </li>
                         </ul>
                         <p class="mb-3">
                             Participants with submitted articles to the REMIA workshop and technical
-                            reports will be guaranteed to be cited in the future paper resuming the ATLAS challenge.
+                            reports will be guaranteed to be cited in the future article summarizing the ATLAS challenge.
                         </p>
                         <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Log in / Sign up</a>
                     </div>
@@ -40,19 +40,58 @@
                     <div class="col-lg-8 order-lg-2 p-5">
                         <h2 class="underline mb-3">Using docker containers</h2>
                         <p class="mb-2">
-                            Each submitted Docker container to the challenge should include a CPU inference
-                            option to prevent driver compatibility issues and memory constraints. Additionally,
-                            to optimize inference speed using gpu, we suggest providing containers allowing to
-                            run the inference using the following environment:
+                           To avoid driver incompatibilities and memory limitations, all submitted Dockers must be able to perform inference on the CPU
+                           using a maximum memory of 32 GB. To prevent cheating, we will disable the Internet connection during inference on the test images. 
+                           An example of a Dockerfile  that can be used to build images with Python  is available here (Dockerfile). In addition to installing
+                           Python, it creates a Python virtual environment and installs some Python packages (requirements.txt). Then, it defines a working 
+                           directory and copies some files (check_pytorch.py, my_network_infer.py, unet.py, my_network.pt) from the host (your machine) into
+                           the image. When the image is executed a bash shell is run. The directory structure should look like the following: 
                         </p>
-                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
-                            <li class="list-group-item">GPU: NVIDAI TESLA V100 32GB VRAM, single GPU</li>
-                            <li class="list-group-item">RAM: 32 GB</li>
-                            <li class="list-group-item">GPU DRIVER: NVIDIA-DRIVER Version 470.103.01</li>
+                        <ul class="list-group list-group-flush mt-2 mb-2">
+                            <li class="list-group-item">atlas-docker</li>
+                            <li class="list-group-item">|____Dockerfile </li>
+                            <li class="list-group-item">|____requirements.txt </li>
+                            <li class="list-group-item">|____check_pytorch.py  </li>
+                            <li class="list-group-item">|____unet.py  </li>
+                            <li class="list-group-item">|____my_network_infer.py </li>
+                            <li class="list-group-item">|____my_network.pt</li>
+                            <li class="list-group-item">|____my_network_train.py</li>
+                            <li class="list-group-item">|____MRIImages</li>
+                            <li class="list-group-item" style="margin-left: 40px;">|____ im0.nii.gz</li>
                         </ul>
+
+                        <h3 class="mb-3">*Check that everything goes well  </h3>
                         <p class="mb-2">
-                            To prevent cross-cheating, we will disable the internet connection during running time.
+                            Using a terminal, go to the atlas-docker folder, then run the following command to build the image: docker build -t name_of_your_image . 
                         </p>
+                        <p class="mb-2">
+                            To see your newly built image, run: docker images. You should see an image named name_of_your_image  
+                        </p>
+                        <p class="mb-2">
+                            To create and run a new container from the newly built image, use the following command: docker run -it name_of_your_image.
+                            You should get inside the container in the /app folder. To check that Pytorch is installed correctly, you can run inside the container 
+                            in the /app folder: python3 check_pytorch.py 
+                        </p>
+                        <h3 class="mb-3">*Infer on the CPU using the previous Docker image   </h3>
+                         <p class="mb-2">
+                            After creating and training a network (my_network_train.py) on GPU/CPU/TPU etc., save your model to a file (my_network.pt). 
+                            Then, create a CPU inference script such as my_network_infer.py. Note that the files my_network.pt and my_network_infer.py have already
+                             been copied (see Dockerfile). 
+                        </p>
+                        <p class="mb-2">
+                            To be able to execute the inference script on an MRI image hosted on the local machine (your computer), you need to mount the folder containing 
+                            the MRI images into the container. To do this, use the -v option when using docker run: 
+                            docker run -v absolute_host_machine_path_where_are_the_MRI_images:absolute_path_inside_the_container -it name_of_your_image.
+                        </p>
+                        <p class="mb-2">
+                            For example: docker run: docker run -v absolute_host_machine_path_where_are_the_MRI_images:/app/MRIImages -it name_of_your_image. 
+                            As before, you should get inside the container in the /app folder.
+                        </p>
+                        <p class="mb-2">
+                            To run your inference script on an image, you can do: python3 my_network_infer.py -i MRIImages/name_of_the_MRI_image.nii.gz 
+                            -o MRIImages/output_network_image.nii.gz -s my_network.pt 
+                        </p>
+
                         <p class="mb-2">
                             It is the participant’s responsibility to create a development environment
                             and other prerequisites besides GPU drivers, such as Conda, PyTorch, CUDA,
