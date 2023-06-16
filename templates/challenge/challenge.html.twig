@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block nav %}
+    {{ include('partials/_nav.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    <main class="page-wrapper">
+        <section id="header" class="bg-white border-bottom border-dark border-opacity-25">
+            <img src="{{ asset('build/images/challenge.jpg') }}" class="img-fluid w-100" alt="">
+        </section>
+        <section id="participate" class="bg-body-tertiary pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12 p-5">
+                        <h2 class="display-3 underline mb-3">How to participate ?</h2>
+                        <p class="mb-2">
+                            {% if not app.user %}
+                                <a href="{{ path('app_login') }}">Registered</a> participants must provide one of the two following documents:
+                            {% else %}
+                                Participants must provide one of the two following documents:
+                            {% endif %}                        </p>
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item bg-body-tertiary"> A technical report detailing their method provided along with the docker container</li>
+                            <li class="list-group-item bg-body-tertiary">A submission to the <a href="https://miccai-remia.github.io/">REMIA workshop</a>  of a paper detailing their report
+
+                            </li>
+                        </ul>
+                        <p class="mb-3">
+                            Participants with submitted articles to the REMIA workshop and technical
+                            reports will be guaranteed to be cited in the future article summarizing the ATLAS challenge.
+                        </p>
+                        {% if not app.user %}
+                            <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Log in / Sign up</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="docker" class="bg-white pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8  p-5">
+                        <h2 class="underline mb-3">Using docker containers</h2>
+                        <p class="mb-3">
+                            To avoid driver incompatibilities and memory limitations, all submitted Dockers must be
+                            able to perform inference on the CPU
+                            using a maximum memory of 32 GB. To prevent cheating, we will disable the
+                            Internet connection during inference on the test images.
+                            An example of a Dockerfile  that can be used to build images with Python
+                            is available here (<code>Dockerfile</code>). In addition to installing
+                            Python, it creates a Python virtual environment and installs some Python packages
+                            (see <code>requirements.txt</code>). Then, it defines a working
+                            directory and copies some files (<code>check_pytorch.py</code>,
+                            <code>my_network_infer.py</code>, <code>unet.py</code>,
+                            <code>my_network.pt</code>) from the host (your machine) into
+                            the image. When the image is executed a bash shell is run. The directory
+                            structure should look like the following:
+                        </p>
+                        <h3 class="mt-3 mb-">Get the Docker container</h3>
+                        <ul class="list-group list-group-flush mt-2 mb-4">
+                            <li class="list-group-item">atlas-docker</li>
+                            <li class="list-group-item">|____Dockerfile </li>
+                            <li class="list-group-item">|____requirements.txt </li>
+                            <li class="list-group-item">|____check_pytorch.py  </li>
+                            <li class="list-group-item">|____unet.py  </li>
+                            <li class="list-group-item">|____my_network_infer.py </li>
+                            <li class="list-group-item">|____my_network.pt</li>
+                            <li class="list-group-item">|____my_network_train.py</li>
+                            <li class="list-group-item">|____MRIImages</li>
+                            <li class="list-group-item" style="margin-left: 40px;">|____ im0.nii.gz</li>
+                        </ul>
+
+                        {% if app.user %}
+                        <form action="{{ path('app_docker_download') }}">
+                            <button type="submit" class="btn btn-lg btn-primary" id="downloadDocker">
+                                <i class="fa-solid fa-file-zipper fa-xl pe-3"></i> Download (10 MB)
+                            </button>
+                        </form>
+                        {% else %}
+                        <p>
+                            Only <a href="{{ path('app_login') }}">Registered</a> participants can download the docker image.
+                        </p>
+                        <form action="{{ path('app_docker_download') }}">
+                            <button type="submit" class="btn btn-lg btn-primary" id="downloadDocker" disabled>
+                                <i class="fa-solid fa-file-zipper fa-xl pe-3"></i> Download (10 MB)
+                            </button>
+                        </form>
+                        {% endif %}
+
+                    </div>
+                    <div class="col-lg-4 img-bg img-h-20" style="background-image: url('{{ asset('build/images/container.jpg') }}');">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col p-5">
+                        <h3 class="mt-4 mb-2">Check that everything goes well  </h3>
+                        <p class="mb-2">
+                            Unzip the archive and, using a terminal, go to the  <code>atlas-docker</code> folder.
+                            Then run the following command to build the image:
+                            <br>
+                            <kbd>docker build -t name_of_your_image</kbd>
+                        </p>
+                        <p class="mb-2">
+                            To see your newly built image, run <br>
+                            <kbd>docker images</kbd>
+                            <br>
+                            You should see an image named <code>name_of_your_image</code>.
+                        </p>
+                        <p class="mb-2">
+                            To create and run a new container from the newly built image, use the following command <br>
+                            <kbd>docker run -it name_of_your_image</kbd>
+                        </p>
+                        <p class="mb-2">
+                            You should get inside the container in the <code>/app</code> folder.
+                            To check that Pytorch is installed correctly, you can run inside the container
+                            in the /app folder <br>
+                            <kbd>python3 check_pytorch.py</kbd>
+                        </p>
+                        <h3 class="mt-4 mb-2">Infer on the CPU using the Docker image   </h3>
+                        <p class="mb-2">
+                            After creating and training a network (<code>my_network_train.py</code>) on GPU/CPU/TPU etc.,
+                            save your model to a file (<code>my_network.pt</code>).
+                            Then, create a CPU inference script such as <code>my_network_infer.py</code>.
+                            Note that the files <code>my_network.pt</code> and <code>my_network_infer.py</code> have
+                            already been copied (see Dockerfile).
+                        </p>
+                        <p class="mb-2">
+                            To be able to execute the inference script on an MRI image hosted on the local machine
+                            (your computer), you need to mount the folder containing
+                            the MRI images into the container. To do this, use the -v option when using docker run
+                            <br>
+                            <kbd>
+                                docker run -v absolute_host_machine_path_where_are_the_MRI_images:absolute_path_inside_the_container -it name_of_your_image
+                            </kbd>
+                        </p>
+                        <p class="mb-2">
+                            For example,
+                            <br>
+                            <kbd>
+                                docker run: docker run -v absolute_host_machine_path_where_are_the_MRI_images:/app/MRIImages -it name_of_your_image
+                            </kbd>
+                            <br>
+                            As before, you should get inside the container in the <code>/app</code> folder.
+                        </p>
+                        <p class="mb-2">
+                            To run your inference script on an image, you can do
+                            <br>
+                            <kbd>
+                                python3 my_network_infer.py -i MRIImages/name_of_the_MRI_image.nii.gz
+                            -o MRIImages/output_network_image.nii.gz -s my_network.pt
+                            </kbd>
+
+                        </p>
+
+                        <p class="mb-2">
+                            It is the participant’s responsibility to create a development environment
+                            and other prerequisites besides GPU drivers, such as Conda, PyTorch, CUDA,
+                            CUDNN, and other tools.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section id="metrics" class="bg-body-secondary pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8  p-5">
+                        <h2 class="underline mb-3">Metrics</h2>
+                        <p class="mb-2">
+                            Evaluation of the algorithms will be done on the test set using the provided docker
+                            container by the participants. Five different metrics will be used:
+                        </p>
+                        <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
+                            <li class="list-group-item bg-body-secondary">The average dice per structure</li>
+                            <li class="list-group-item bg-body-secondary">The 3mm surface Dice</li>
+                            <li class="list-group-item bg-body-secondary">The Average symmetric surface distance</li>
+                            <li class="list-group-item bg-body-secondary">The Hausdorff distance</li>
+                            <li class="list-group-item bg-body-secondary">The Root Mean Square Error on tumor burden calculation </li>
+                        </ul>
+                        <p class="mb-2">
+                            Every metric except for the tumor burden will be calculated twice, once for the liver
+                            and once for the tumor. The code that allows metric calculations is provided with
+                            the dataset.
+                        <p>
+                        <p class="mb-2">
+                            Rank-then-aggregate voting system over the nine scores obtained by the
+                            participants will be used to compute the ranking.
+                        </p>
+                    </div>
+                    <div class="col-lg-4  img-bg img-h-20" style="background-image: url('{{ asset('build/images/metrics.jpg') }}');">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
