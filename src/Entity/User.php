@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $dataset = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $docker = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -183,6 +186,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDataset(?bool $dataset): self
     {
         $this->dataset = $dataset;
+
+        return $this;
+    }
+
+    public function isDocker(): ?bool
+    {
+        return $this->docker;
+    }
+
+    public function setDocker(?bool $docker): self
+    {
+        $this->docker = $docker;
 
         return $this;
     }

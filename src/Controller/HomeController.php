@@ -17,14 +17,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/challenge', name: 'app_challenge')]
-    public function challenge(): Response
-    {
-        return $this->render('home/challenge.html.twig', [
-            'title' => 'Challenge'
-        ]);
-    }
-
     #[Route('/under_construction', name: 'app_under_construction')]
     public function underConstruction(): Response
     {
