@@ -60,7 +60,7 @@
                             <li class="list-group-item" style="margin-left: 40px;">|____ im0.nii.gz</li>
                         </ul>
 
-                        <h3 class="mb-3">*Check that everything goes well  </h3>
+                        <h3 class="mb-3">Check that everything goes well  </h3>
                         <p class="mb-2">
                             Using a terminal, go to the atlas-docker folder, then run the following command to build the image: docker build -t name_of_your_image . 
                         </p>
@@ -72,7 +72,7 @@
                             You should get inside the container in the /app folder. To check that Pytorch is installed correctly, you can run inside the container 
                             in the /app folder: python3 check_pytorch.py 
                         </p>
-                        <h3 class="mb-3">*Infer on the CPU using the previous Docker image   </h3>
+                        <h3 class="mb-3">Infer on the CPU using the previous Docker image   </h3>
                          <p class="mb-2">
                             After creating and training a network (my_network_train.py) on GPU/CPU/TPU etc., save your model to a file (my_network.pt). 
                             Then, create a CPU inference script such as my_network_infer.py. Note that the files my_network.pt and my_network_infer.py have already
