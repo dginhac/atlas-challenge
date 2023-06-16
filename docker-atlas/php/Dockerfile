@@ -43,4 +43,13 @@ RUN echo "sendmail_path=sendmail -i -t" >> /usr/local/etc/php/conf.d/php-sendmai
 RUN apt-get install -y supervisor
 COPY conf/messenger-worker.conf /etc/supervisor/conf.d/
 
+RUN a2enmod ssl && a2enmod rewrite
+RUN mkdir -p /etc/apache2/ssl
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+COPY ssl/*.pem /etc/apache2/ssl/
+
 WORKDIR /var/www/
+
+EXPOSE 80
+EXPOSE 443
