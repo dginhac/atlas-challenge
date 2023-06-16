@@ -74,7 +74,7 @@
                         <h2 class="underline mb-3">The ATLAS dataset</h2>
                         <p class="mb-2">
                             The ATLAS dataset was largely acquired at the University Hospital, Dijon 21 000,
-                            France and consists of real clinical acquisitions of HCC. The ATLAS dataset was
+                            France and consists of real-world clinical acquisitions of HCC. The ATLAS dataset was
                             anonymized and processed in accordance with the rules established by the Ethical
                             Committee of the University Hospital of Dijon. All administrative information
                             included in the metadata has been removed, making it untraceable. Thus, in accordance
@@ -111,9 +111,9 @@
                         <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
                             <li class="list-group-item bg-body-secondary border-secondary-subtle">
                             A training set of 60 patients acquired from 2012 to 2020 containing 60 images
-                                along with the 60 corresponding labels for liver and tumor under nifty format.
+                                along with the 60 corresponding labels for liver and tumor in nifty format.
                             </li>
-                            <li class="list-group-item bg-body-secondary border-secondary-subtle">A testing set of
+                            <li class="list-group-item bg-body-secondary border-secondary-subtle">A test set of
                                 30 patients acquired from 2020 to 2023 containing 30 images
                                 along with the 30 corresponding labels for liver and tumor under nifty format.
                             </li>
@@ -125,15 +125,15 @@
                             will be available during the submission process.
                         </p>
                         <p class="mb-2">
-                            The python code which will be used for metric calculation is also provided in the
+                            The Python code which will be used for metric calculation is also provided in the
                             folder "metric_calculation".
                         </p>
                         <p class="mb-2">
-                            Since the dataset was acquired over 11 years the quality of the patient care and of
-                            the acquisitions has improved. Thus, a domain shift between the older and recent
-                            acquisition exists, most recent acquisitions are more likely to resemble future
-                            acquisitions. For this reason, the test set is composed of the most recent patients
-                            of the dataset. The test dataset will be released once the website closes in late 2025.
+                            Since the dataset was acquired over 11 years the quality of patient care and quality of
+                            acquisitions has gradually improved. Thus, there is a domain shift between the older and more recent
+                            acquisitions, most recent acquisitions being more likely to resemble future
+                            acquisitions. For this reason, the test set consists of the most recent patients
+                            of the dataset. The test dataset will be released when the website closes at the end of 2025.
                         </p>
 
 
@@ -149,9 +149,8 @@
                     <div class="col-lg-8 order-lg-2 p-5">
                         <h2 class="underline mb-3">Data source</h2>
                         <p class="mb-2">
-                            The CE-MRI exams of the ATLAS dataset were mainly performed on five Siemens MRI machines of
-                            1.5T and 3T. Few exams were done on General Electric (GE) MRI 1.5T machines using
-                            gadolinium-based contrast agent injection.
+                            The CE-MRI (gadolinium-based contrast agents) images of the ATLAS dataset were mainly acquired on five Siemens
+                            1.5T and 3T MRI machines. Few acquisitions were made on General Electric (GE) 1.5T MRI machines.
                         </p>
                         <p class="mb-2">
                             Each acquisition is T1-weighted in the transversal axis with an ultrafast gradient
@@ -167,9 +166,9 @@
                             and tumor(s). In some rare cases, the selected image is done without agent contrast injection.
                         </p>
                         <p class="mb-2">
-                            Finally, a CE-MRI of the ATLAS dataset consists in a 3D image of 44 to 136 transversal
+                            Finally, a CE-MRI of the ATLAS dataset consists of a 3D image of 44 to 136 transversal
                             slices of the thorax and abdomen covering the entire liver and tumor. Each slice has a
-                            pixel spacing between 0.68 x 0.68 mm² and 1.41 x 1.41mm², and a slice thickness between
+                            pixel spacing between 0.68 x 0.68 mm² and 1.41 x 1.41mm², and the slice thickness is between
                             2mm and 4mm.
                         </p>
                         <p class="mb-2">
