@@ -42,8 +42,8 @@
         <section id="docker" class="bg-white pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8  p-5">
-                        <h2 class="underline mb-3">Using docker containers</h2>
+                    <div class="col-lg-6 p-5 pb-2">
+                        <h2 class="underline mb-3">Using Docker containers</h2>
                         <p class="mb-3">
                             To avoid driver incompatibilities and memory limitations, all submitted Dockers must be
                             able to perform inference on the CPU
@@ -59,24 +59,31 @@
                             the image. When the image is executed a bash shell is run. The directory
                             structure should look like the following:
                         </p>
-                        <h3 class="mt-3 mb-">Get the Docker container</h3>
-                        <ul class="list-group list-group-flush mt-2 mb-4">
-                            <li class="list-group-item">atlas-docker</li>
-                            <li class="list-group-item">|____Dockerfile </li>
-                            <li class="list-group-item">|____requirements.txt </li>
-                            <li class="list-group-item">|____check_pytorch.py  </li>
-                            <li class="list-group-item">|____unet.py  </li>
-                            <li class="list-group-item">|____my_network_infer.py </li>
-                            <li class="list-group-item">|____my_network.pt</li>
-                            <li class="list-group-item">|____my_network_train.py</li>
-                            <li class="list-group-item">|____MRIImages</li>
-                            <li class="list-group-item" style="margin-left: 40px;">|____ im0.nii.gz</li>
+                        <h3 class="mt-3 mb-">Get the Atlas Docker container</h3>
+                        <p class="mb-2">
+                            The Atlas Docker container is organized as follows:
+                        </p>
+                        <ul class="list-unstyled mt-2 mb-4">
+                            <li class="fw-bold">atlas-docker</li>
+                            <li class="ms-4">|____Dockerfile </li>
+                            <li class="ms-4">|____requirements.txt </li>
+                            <li class="ms-4">|____check_pytorch.py  </li>
+                            <li class="ms-4">|____unet.py  </li>
+                            <li class="ms-4">|____my_network_infer.py </li>
+                            <li class="ms-4">|____my_network.pt</li>
+                            <li class="ms-4">|____my_network_train.py</li>
+                            <li class="ms-4">|____MRIImages</li>
+                            <li class="ms-4">
+                                <ul class="list-unstyled">
+                                    <li class="ms-4" >|____ im0.nii.gz</li>
+                                </ul>
+                            </li>
                         </ul>
 
                         {% if app.user %}
                         <form action="{{ path('app_docker_download') }}">
                             <button type="submit" class="btn btn-lg btn-primary" id="downloadDocker">
-                                <i class="fa-solid fa-file-zipper fa-xl pe-3"></i> Download (10 MB)
+                                <i class="fa-solid fa-file-zipper fa-xl pe-3"></i> Download the zip archive (10 MB)
                             </button>
                         </form>
                         {% else %}
@@ -91,11 +98,14 @@
                         {% endif %}
 
                     </div>
-                    <div class="col-lg-4 img-bg img-h-20" style="background-image: url('{{ asset('build/images/container.jpg') }}');">
+
+                    <div class="col-lg-6 img-bg img-h-20" style="background-image: url('{{ asset('build/images/container.jpg') }}');">
+
                     </div>
+
                 </div>
                 <div class="row">
-                    <div class="col p-5">
+                    <div class="col p-5 pt-2">
                         <h3 class="mt-4 mb-2">Check that everything goes well  </h3>
                         <p class="mb-2">
                             Unzip the archive and, using a terminal, go to the  <code>atlas-docker</code> folder.
@@ -160,26 +170,70 @@
                             and other prerequisites besides GPU drivers, such as Conda, PyTorch, CUDA,
                             CUDNN, and other tools.
                         </p>
+                        <div class="alert alert-primary " role="alert">
+                        <p class="mb-2">
+                            Once you have obtained satisfactory results, you can submit your model using the upload form below.
+                        </p>
+                        </div>
                     </div>
 
                 </div>
             </div>
         </section>
-        <section id="metrics" class="bg-body-secondary pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+        <section id="submission" class="bg-body-secondary pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8  p-5">
+                        <h2 class="underline mb-3">Upload your model</h2>
+                        <p class="mb-2">
+                            Participants are invited to submit their contributions by uploading a Docker archive.
+                            This archive should contain a Docker file that builds the image and a script that
+                            allows us to run the model on the test images.
+                        </p>
+
+                        <p class="mb-2">
+                            Each participant is authorized to submit twice their models.
+                            The best performance over the two submissions will be retained.
+                        </p>
+
+                        {{ form_start(form, {
+                            'attr': {
+                                'novalidate': 'novalidate',
+                                'class':'needs-validation'
+                            }
+                        }) }}
+
+                        {{ form_row(form.zipFile) }}
+
+                        {{ form_row(form.reportFile) }}
+
+                        <button type="button" class="btn btn-primary btn-lg mt-3" id="upload">
+                            Upload your contribution
+                        </button>
+
+                        {{ form_end(form) }}
+
+                    </div>
+                    <div class="col-lg-4  img-bg img-h-20" style="background-image: url('{{ asset('build/images/submit.jpg') }}');">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="metrics" class="bg-white pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 order-lg-2 p-5">
                         <h2 class="underline mb-3">Metrics</h2>
                         <p class="mb-2">
                             Evaluation of the algorithms will be done on the test set using the provided docker
                             container by the participants. Five different metrics will be used:
                         </p>
                         <ul class="list-group list-group-numbered list-group-flush mt-2 mb-2">
-                            <li class="list-group-item bg-body-secondary">The average dice per structure</li>
-                            <li class="list-group-item bg-body-secondary">The 3mm surface Dice</li>
-                            <li class="list-group-item bg-body-secondary">The Average symmetric surface distance</li>
-                            <li class="list-group-item bg-body-secondary">The Hausdorff distance</li>
-                            <li class="list-group-item bg-body-secondary">The Root Mean Square Error on tumor burden calculation </li>
+                            <li class="list-group-item">The average dice per structure</li>
+                            <li class="list-group-item">The 3mm surface Dice</li>
+                            <li class="list-group-item">The Average symmetric surface distance</li>
+                            <li class="list-group-item">The Hausdorff distance</li>
+                            <li class="list-group-item">The Root Mean Square Error on tumor burden calculation </li>
                         </ul>
                         <p class="mb-2">
                             Every metric except for the tumor burden will be calculated twice, once for the liver
@@ -191,10 +245,11 @@
                             participants will be used to compute the ranking.
                         </p>
                     </div>
-                    <div class="col-lg-4  img-bg img-h-20" style="background-image: url('{{ asset('build/images/metrics.jpg') }}');">
+                    <div class="col-lg-4 order-lg-1 img-bg img-h-20" style="background-image: url('{{ asset('build/images/metrics.jpg') }}');">
                     </div>
                 </div>
             </div>
         </section>
+
     </main>
 {% endblock %}
