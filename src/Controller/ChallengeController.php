@@ -23,25 +23,24 @@ class ChallengeController extends AbstractController
     public function challenge(Request $request, MailerInterface $mailer): Response
     {
         $user = $this->getUser();
-
-        $submission = new Submission();
-        $submission->setUser($user);
-        $form = $this->createForm(SubmissionType::class, $submission, [
-            'required_file' => true
-        ]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($submission);
-            $this->entityManager->flush();
-
-            //return $this->redirectToRoute('app_challenge');
+        $form = null;
+        if ($user) {
+            $submission = new Submission();
+            $submission->setUser($user);
+            $form = $this->createForm(SubmissionType::class, $submission, [
+                'required_file' => true
+            ]);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->entityManager->persist($submission);
+                $this->entityManager->flush();
+                //return $this->redirectToRoute('app_challenge');
+            }
         }
-
-
-
         return $this->render('challenge/challenge.html.twig', [
             'title' => 'Challenge',
             'form' => $form,
+
         ]);
     }
 

@@ -87,14 +87,10 @@
                             </button>
                         </form>
                         {% else %}
-                        <p>
+                        <div class="alert alert-warning">
                             Only <a href="{{ path('app_login') }}">Registered</a> participants can download the docker image.
-                        </p>
-                        <form action="{{ path('app_docker_download') }}">
-                            <button type="submit" class="btn btn-lg btn-primary" id="downloadDocker" disabled>
-                                <i class="fa-solid fa-file-zipper fa-xl pe-3"></i> Download (10 MB)
-                            </button>
-                        </form>
+                        </div>
+
                         {% endif %}
 
                     </div>
@@ -196,22 +192,28 @@
                             The best performance over the two submissions will be retained.
                         </p>
 
-                        {{ form_start(form, {
-                            'attr': {
-                                'novalidate': 'novalidate',
-                                'class':'needs-validation'
-                            }
-                        }) }}
+                        {% if app.user %}
+                            {{ form_start(form, {
+                                'attr': {
+                                    'novalidate': 'novalidate',
+                                    'class':'needs-validation'
+                                }
+                            }) }}
+                            {{ form_row(form.zipFile) }}
+                            {{ form_row(form.reportFile) }}
 
-                        {{ form_row(form.zipFile) }}
+                            <button type="submit" class="btn btn-primary btn-lg mt-3" id="upload">
+                                Upload your contribution
+                            </button>
 
-                        {{ form_row(form.reportFile) }}
+                            {{ form_end(form) }}
+                        {% else %}
+                            <div class="alert alert-warning">
+                                Only <a href="{{ path('app_login') }}">Registered</a> participants can upload a contribution.
+                            </div>
 
-                        <button type="button" class="btn btn-primary btn-lg mt-3" id="upload">
-                            Upload your contribution
-                        </button>
 
-                        {{ form_end(form) }}
+                        {% endif %}
 
                     </div>
                     <div class="col-lg-4  img-bg img-h-20" style="background-image: url('{{ asset('build/images/submit.jpg') }}');">

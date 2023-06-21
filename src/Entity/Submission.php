@@ -100,9 +100,9 @@ class Submission
         $this->zipSize = $zipSize;
     }
 
-    public function getCvSize(): ?int
+    public function getZipSize(): ?int
     {
-        return $this->cvSize;
+        return $this->zipSize;
     }
 
 
