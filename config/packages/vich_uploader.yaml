@@ -3,8 +3,8 @@ vich_uploader:
 
     mappings:
         submission:
-            uri_prefix: /data/uploads
-            upload_destination: '%kernel.project_dir%/public/data/uploads'
+            uri_prefix: /uploads
+            upload_destination: '%kernel.project_dir%/public/uploads'
             #namer:
             #    service: Vich\UploaderBundle\Naming\PropertyNamer
             #    options: { property: 'user.id' }

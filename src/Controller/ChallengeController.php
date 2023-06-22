@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Submission;
+use App\Entity\User;
 use App\Form\SubmissionType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChallengeController extends AbstractController
 {
+    public const MAX_NUMBER_OF_SUBMISSIONS = 2;
     private EntityManagerInterface $entityManager;
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -22,14 +24,21 @@ class ChallengeController extends AbstractController
     #[Route('/challenge', name: 'app_challenge')]
     public function challenge(Request $request, MailerInterface $mailer): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $form = null;
+        $submissions_nb = 0;
         if ($user) {
+
+
+
+
             $submission = new Submission();
             $submission->setUser($user);
             $form = $this->createForm(SubmissionType::class, $submission, [
                 'required_file' => true
             ]);
+
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManager->persist($submission);
@@ -40,7 +49,6 @@ class ChallengeController extends AbstractController
         return $this->render('challenge/challenge.html.twig', [
             'title' => 'Challenge',
             'form' => $form,
-
         ]);
     }
 

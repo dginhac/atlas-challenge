@@ -15,12 +15,13 @@ class SubmissionType extends AbstractType
     {
         $builder
             ->add('zipFile', VichFileType::class, [
-                'label' => 'ZIP',
+                'label' => 'Docker Archive (zip)',
                 'required' => $options['required_file'],
                 'invalid_message' => 'This file is not valid.',
             ])
             ->add('reportFile', VichFileType::class, [
-                'label' => 'Technical report',
+                'label' => 'Technical report (pdf)',
+                'required' => $options['required_file'],
                 'invalid_message' => 'This file is not valid.',
             ]);
     }

@@ -57,11 +57,11 @@
                             </div>
 
                         {% else %}
-                            <p class="mb-3">
-                                The datasets are only available for download by
+                            <div class="alert alert-warning">
+                                <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
+                                The datasets are only available to
                                 <a href="{{ path('app_login') }}">registered</a> users.
-                            </p>
-                            <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Log in / Sign up</a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>

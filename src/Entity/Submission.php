@@ -29,6 +29,7 @@ class Submission
     public function prePersist(): void {
         if(empty($this->createdAt)) {
             $this->createdAt = new \DateTimeImmutable();
+            $this->number++;
         }
     }
 
@@ -120,6 +121,9 @@ class Submission
     #[ORM\Column(type: 'integer')]
     private ?int $reportSize = null;
 
+    #[ORM\Column]
+    private ?int $number = null;
+
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -182,6 +186,18 @@ class Submission
     public function setUser(?User $User): self
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    public function getNumber(): ?int
+    {
+        return $this->number;
+    }
+
+    public function setNumber(int $number): self
+    {
+        $this->number = $number;
 
         return $this;
     }

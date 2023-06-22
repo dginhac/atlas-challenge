@@ -12,6 +12,7 @@ class UploadedFilesNamer implements NamerInterface
 
     public function name($object, PropertyMapping $mapping): string
     {
+        // To customize - not yet implemented
         $file = $mapping->getFile($object);
         $extension = $this->getExtension($file);
         $name = $object->getUser()->getId();
