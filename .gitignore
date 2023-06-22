@@ -28,4 +28,5 @@ yarn-error.log
 
 public/downloads
 public/data
+public/uploads
 docker-atlas/php/ssl/*.pem
