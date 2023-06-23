@@ -29,7 +29,6 @@ class Submission
     public function prePersist(): void {
         if(empty($this->createdAt)) {
             $this->createdAt = new \DateTimeImmutable();
-            $this->number++;
         }
     }
 
@@ -58,6 +57,15 @@ class Submission
 
     #[ORM\Column(type: 'integer')]
     private ?int $zipSize = null;
+
+    #[Vich\UploadableField(mapping: 'submission', fileNameProperty: 'reportName', size: 'reportSize')]
+    private ?File $reportFile = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $reportName = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $reportSize = null;
 
 
     /**
@@ -111,15 +119,6 @@ class Submission
 
 
 
-
-    #[Vich\UploadableField(mapping: 'submission', fileNameProperty: 'reportName', size: 'reportSize')]
-    private ?File $reportFile = null;
-
-    #[ORM\Column(type: 'string')]
-    private ?string $reportName = null;
-
-    #[ORM\Column(type: 'integer')]
-    private ?int $reportSize = null;
 
     #[ORM\Column]
     private ?int $number = null;

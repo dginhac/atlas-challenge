@@ -46,15 +46,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $dataset = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $docker = null;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Docker::class)]
+    private Collection $dockers;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Submission::class, orphanRemoval: true)]
-    private Collection $submissions;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Report $report = null;
 
     public function __construct()
     {
-        $this->submissions = new ArrayCollection();
+        $this->dockers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,44 +200,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isDocker(): ?bool
-    {
-        return $this->docker;
-    }
-
-    public function setDocker(?bool $docker): self
-    {
-        $this->docker = $docker;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Submission>
+     * @return Collection<int, Docker>
      */
-    public function getSubmissions(): Collection
+    public function getDockers(): Collection
     {
-        return $this->submissions;
+        return $this->dockers;
     }
 
-    public function addSubmission(Submission $submission): self
+    public function addDocker(Docker $docker): self
     {
-        if (!$this->submissions->contains($submission)) {
-            $this->submissions->add($submission);
-            $submission->setUser($this);
+        if (!$this->dockers->contains($docker)) {
+            $this->dockers->add($docker);
+            $docker->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeSubmission(Submission $submission): self
+    public function removeDocker(Docker $docker): self
     {
-        if ($this->submissions->removeElement($submission)) {
+        if ($this->dockers->removeElement($docker)) {
             // set the owning side to null (unless already changed)
-            if ($submission->getUser() === $this) {
-                $submission->setUser(null);
+            if ($docker->getUser() === $this) {
+                $docker->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getReport(): ?Report
+    {
+        return $this->report;
+    }
+
+    public function setReport(Report $report): self
+    {
+        // set the owning side of the relation if necessary
+        if ($report->getUser() !== $this) {
+            $report->setUser($this);
+        }
+
+        $this->report = $report;
 
         return $this;
     }

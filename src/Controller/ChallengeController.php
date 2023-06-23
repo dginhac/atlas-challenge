@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Submission;
+use App\Entity\Docker;
+use App\Entity\Report;
 use App\Entity\User;
 use App\Form\SubmissionType;
+use App\Form\DockerType;
+use App\Form\ReportType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -22,33 +26,47 @@ class ChallengeController extends AbstractController
         $this->entityManager = $entityManager;
     }
     #[Route('/challenge', name: 'app_challenge')]
-    public function challenge(Request $request, MailerInterface $mailer): Response
+    public function challenge(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer):
+    Response
     {
         /** @var User $user */
         $user = $this->getUser();
-        $form = null;
-        $submissions_nb = 0;
+        $dockerForm = null;
         if ($user) {
 
-
-
-
-            $submission = new Submission();
-            $submission->setUser($user);
-            $form = $this->createForm(SubmissionType::class, $submission, [
-                'required_file' => true
+            $docker = new Docker();
+            $docker->setUser($user);
+            $dockerForm = $this->createForm(DockerType::class, $docker, [
             ]);
-
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->entityManager->persist($submission);
-                $this->entityManager->flush();
-                //return $this->redirectToRoute('app_challenge');
+            $dockerForm->handleRequest($request);
+            if ($dockerForm->isSubmitted() && $dockerForm->isValid()) {
+                $docker->setNumber($user->getDockers()->count() + 1);
+                $entityManager->persist($docker);
+                $entityManager->flush();
+                $this->addFlash(
+                    'success',
+                    'Your docker has been uploaded.'
+                );
+                return $this->redirectToRoute('app_challenge');
+            }
+            $report = new Report();
+            $report->setUser($user);
+            $reportForm = $this->createForm(ReportType::class, $report, [
+            ]);
+            $reportForm->handleRequest($request);
+            if ($reportForm->isSubmitted() && $reportForm->isValid()) {
+                $entityManager->persist($report);
+                $entityManager->flush();
+                $this->addFlash(
+                    'success',
+                    'Your technical report has been uploaded.'
+                );
+                return $this->redirectToRoute('app_challenge');
             }
         }
         return $this->render('challenge/challenge.html.twig', [
             'title' => 'Challenge',
-            'form' => $form,
+            'dockerForm' => $dockerForm,
         ]);
     }
 

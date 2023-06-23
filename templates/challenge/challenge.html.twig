@@ -15,6 +15,7 @@
             <div class="container">
                 <div class="row ">
                     <div class="col-12 p-5">
+                        {% include 'partials/_flash.html.twig' %}
                         <h2 class="display-3 underline mb-3">How to participate ?</h2>
                         <p class="mb-2">
                             {% if not app.user %}
@@ -204,48 +205,53 @@
                         </p>
 
                         {% if app.user %}
-                            {% if app.user.submissions|length == 0 %}
+                            {% if app.user.dockers|length == 0 %}
                                 <div class="alert alert-primary " role="alert">
                                     <i class="fa-solid fa-circle-info me-3 fs-2"></i>
-                                    You have not submitted yet.
+                                    You have not submitted yet. You can submit two contributions !
                                 </div>
                             {% else %}
-                                <div class="alert alert-primary " role="alert">
-                                    <i class="fa-solid fa-circle-info me-3 fs-2"></i>
-                                    You have already submitted {{ app.user.submissions|length }} time(s):
-                                    <ul class="list-group list-group-flush mt-2 mb-2">
-                                        {% for submission in app.user.submissions %}
-                                            <li class="list-group-item bg-body-secondary">
-                                                <a href=" {{ vich_uploader_asset(submission, 'zipFile') }} "> Docker Archive {{ submission.number }}</a>,
-                                                <a href=" {{ vich_uploader_asset(submission, 'reportFile') }} ">Technical Report {{ submission.number }}</a>
-                                                uploaded on {{ submission.createdAt|date('d/m/Y - H:i:s') }}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-
+                                You have already submitted {{ app.user.dockers|length }} time(s):
+                                <ul class="list-group mt-2 mb-2">
+                                    {% for docker in app.user.dockers %}
+                                        <li class="list-group-item list-group-item-success">
+                                            <a href=" {{ vich_uploader_asset(docker, 'dockerFile') }} "> Docker Archive {{ docker.number }}</a>,
+                                            uploaded on {{ docker.createdAt|date('d/m/Y - H:i:s') }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             {% endif %}
 
-                            {% if app.user.submissions|length == 2 %}
-                                <div class="alert alert-danger">
+                            {% if app.user.dockers|length == 1 %}
+                                <div class="alert alert-primary text-primary mt-4">
+                                    <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
+                                    You can submit another contribution !
+                                </div>
+                            {% endif %}
+                            {% if app.user.dockers|length == 2 %}
+                                <div class="alert alert-danger text-danger mt-4">
                                     <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
                                     You can no longer submit new contributions !
                                 </div>
                             {% endif %}
 
 
-                            {{ form_start(form, {
-                                'attr': {
-                                    'novalidate': 'novalidate',
-                                    'class':'needs-validation'
-                                }
-                            }) }}
-                            {{ form_row(form.zipFile) }}
-                            {{ form_row(form.reportFile) }}
-                            <button type="submit" class="btn btn-primary btn-lg mt-3" id="upload">
-                                Upload your contribution
-                            </button>
-                            {{ form_end(form) }}
+                            {% if app.user.dockers|length != 2 %}
+                                {{ form_start(dockerForm, {
+                                    'attr': {
+                                        'novalidate': 'novalidate',
+                                        'class':'needs-validation'
+                                    }
+                                }) }}
+                                {{ form_row(dockerForm.dockerFile) }}
+                                <button type="submit" class="btn btn-primary btn-lg mt-3" id="upload">
+                                    Upload your contribution
+                                </button>
+                                {{ form_end(dockerForm) }}
+                            {% endif %}
+
+
+
                         {% else %}
                             <div class="alert alert-warning">
                                 <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>

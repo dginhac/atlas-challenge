@@ -2,36 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\Submission;
+use App\Entity\Report;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
-class SubmissionType extends AbstractType
+class ReportType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('zipFile', VichFileType::class, [
-                'label' => 'Docker Archive (zip)',
-                'required' => $options['required_file'],
-                'invalid_message' => 'This file is not valid.',
-            ])
             ->add('reportFile', VichFileType::class, [
                 'label' => 'Technical report (pdf)',
                 'required' => false,
                 'invalid_message' => 'This file is not valid.',
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Submission::class,
-            'required_file' => true
+            // Configure your form options here
+            'data_class' => Report::class,
         ]);
-        $resolver->setAllowedTypes('required_file', 'bool');
     }
 }
