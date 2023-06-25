@@ -118,4 +118,6 @@ class Report
         return $this->reportSize;
     }
 
+
 }
+

@@ -26,12 +26,13 @@ class ChallengeController extends AbstractController
         $this->entityManager = $entityManager;
     }
     #[Route('/challenge', name: 'app_challenge')]
-    public function challenge(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer):
+    public function challenge(Request $request,  MailerInterface $mailer):
     Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $dockerForm = null;
+        $reportForm = null;
         if ($user) {
 
             $docker = new Docker();
@@ -41,22 +42,26 @@ class ChallengeController extends AbstractController
             $dockerForm->handleRequest($request);
             if ($dockerForm->isSubmitted() && $dockerForm->isValid()) {
                 $docker->setNumber($user->getDockers()->count() + 1);
-                $entityManager->persist($docker);
-                $entityManager->flush();
+                $this->entityManager->persist($docker);
+                $this->entityManager->flush();
                 $this->addFlash(
                     'success',
                     'Your docker has been uploaded.'
                 );
                 return $this->redirectToRoute('app_challenge');
             }
-            $report = new Report();
-            $report->setUser($user);
+
+            $report = $this->entityManager->getRepository(Report::class)->findOneBy(['user' => $user]);
+            if (!$report) {
+                $report = new Report();
+            }
             $reportForm = $this->createForm(ReportType::class, $report, [
             ]);
             $reportForm->handleRequest($request);
             if ($reportForm->isSubmitted() && $reportForm->isValid()) {
-                $entityManager->persist($report);
-                $entityManager->flush();
+
+                $this->entityManager->persist($report);
+                $this->entityManager->flush();
                 $this->addFlash(
                     'success',
                     'Your technical report has been uploaded.'
@@ -67,6 +72,7 @@ class ChallengeController extends AbstractController
         return $this->render('challenge/challenge.html.twig', [
             'title' => 'Challenge',
             'dockerForm' => $dockerForm,
+            'reportForm' => $reportForm,
         ]);
     }
 

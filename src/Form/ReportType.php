@@ -15,7 +15,7 @@ class ReportType extends AbstractType
         $builder
             ->add('reportFile', VichFileType::class, [
                 'label' => 'Technical report (pdf)',
-                'required' => false,
+                'allow_delete' => true,
                 'invalid_message' => 'This file is not valid.',
             ])
         ;

@@ -192,7 +192,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8  p-5">
-                        <h2 class="underline mb-3">Upload your model</h2>
+                        <h2 class="underline mb-3">Upload your docker</h2>
                         <p class="mb-2">
                             Participants are invited to submit their contributions by uploading a Docker archive.
                             This archive should contain a Docker file that builds the image and a script that
@@ -244,12 +244,11 @@
                                     }
                                 }) }}
                                 {{ form_row(dockerForm.dockerFile) }}
-                                <button type="submit" class="btn btn-primary btn-lg mt-3" id="upload">
-                                    Upload your contribution
+                                <button type="submit" class="btn btn-primary btn-lg mt-2" id="upload">
+                                    Upload your Docker Archive
                                 </button>
                                 {{ form_end(dockerForm) }}
                             {% endif %}
-
 
 
                         {% else %}
@@ -258,10 +257,29 @@
                                 Only <a href="{{ path('app_login') }}">Registered</a> participants can upload a
                                 contribution.
                             </div>
-
-
                         {% endif %}
 
+                        <h2 class="underline mb-3 mt-5">Upload your technical report</h2>
+
+                        <p class="mb-2">
+                            Participants are invited to upload a technical report detailing their method
+                            provided along with the docker container if they do not submit a paper to to the
+                            <a href="https://miccai-remia.github.io/">REMIA workshop</a>.
+                        </p>
+                        {% if app.user %}
+                            {{ form_start(reportForm, {
+                                'attr': {
+                                    'novalidate': 'novalidate',
+                                    'class':'needs-validation'
+                                }
+                            }) }}
+                            {{ form_row(reportForm.reportFile) }}
+                            <button type="submit" class="btn btn-primary btn-lg mt-2" id="upload">
+                                Upload your report
+                            </button>
+                            {{ form_end(reportForm) }}
+                        {% else %}
+                        {% endif %}
                     </div>
                     <div class="col-lg-4  img-bg img-h-20"
                          style="background-image: url('{{ asset('build/images/submit.jpg') }}');">
