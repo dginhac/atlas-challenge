@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -44,8 +46,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $dataset = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $docker = null;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Docker::class)]
+    private Collection $dockers;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class)]
+    private Collection $reports;
+
+    public function __construct()
+    {
+        $this->dockers = new ArrayCollection();
+        $this->reports = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -190,14 +201,62 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isDocker(): ?bool
+    /**
+     * @return Collection<int, Docker>
+     */
+    public function getDockers(): Collection
     {
-        return $this->docker;
+        return $this->dockers;
     }
 
-    public function setDocker(?bool $docker): self
+    public function addDocker(Docker $docker): self
     {
-        $this->docker = $docker;
+        if (!$this->dockers->contains($docker)) {
+            $this->dockers->add($docker);
+            $docker->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocker(Docker $docker): self
+    {
+        if ($this->dockers->removeElement($docker)) {
+            // set the owning side to null (unless already changed)
+            if ($docker->getUser() === $this) {
+                $docker->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getUser() === $this) {
+                $report->setUser(null);
+            }
+        }
 
         return $this;
     }

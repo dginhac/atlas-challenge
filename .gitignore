@@ -27,4 +27,6 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 public/downloads
+public/data
+public/uploads
 docker-atlas/php/ssl/*.pem
