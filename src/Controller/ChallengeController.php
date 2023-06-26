@@ -79,7 +79,7 @@ class ChallengeController extends AbstractController
     public function datasetDownload(EntityManagerInterface $entityManager): BinaryFileResponse
     {
         $user = $this->getUser();
-        $user->setDocker(true);
+        $user->setDataset(true);
         $entityManager->persist($user);
         $entityManager->flush();
 
