@@ -59,6 +59,13 @@ class ChallengeController extends AbstractController
             $reportForm->handleRequest($request);
             if ($reportForm->isSubmitted() && $reportForm->isValid()) {
 
+
+                $oldReport = $this->entityManager->getRepository(Report::class)->findOneBy([
+                    'user' => $user,
+                ]);
+                if ($oldReport) {
+                    $this->entityManager->remove($oldReport);
+                }
                 $this->entityManager->persist($report);
                 $this->entityManager->flush();
                 $this->addFlash(

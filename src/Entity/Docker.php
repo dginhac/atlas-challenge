@@ -39,6 +39,9 @@ class Docker
     #[ORM\Column(type: 'integer')]
     private ?int $dockerSize = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $processed = null;
+
     #[ORM\PrePersist]
     public function prePersist(): void {
         if(empty($this->createdAt)) {
@@ -130,5 +133,17 @@ class Docker
     public function getDockerSize(): ?int
     {
         return $this->dockerSize;
+    }
+
+    public function isProcessed(): ?bool
+    {
+        return $this->processed;
+    }
+
+    public function setProcessed(?bool $processed): self
+    {
+        $this->processed = $processed;
+
+        return $this;
     }
 }

@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block nav %}
+    {{ include('partials/_nav.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    <main class="page-wrapper">
+        <section id="header" class="bg-white border-bottom border-dark border-opacity-25">
+            <img src="{{ asset('build/images/admin-zone.jpg') }}" class="img-fluid w-100" alt="">
+        </section>
+        <section id="docker" class="bg-body-secondary pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h2 class="display-3 underline mb-3">Download the Docker containers</h2>
+
+                            <p class="mb-2">
+                                The table below details the Docker containers submitted by participants:
+                            </p>
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Docker</th>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">Upload metrics</th>
+                                    <th scope="col">Processed</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for docker in dockers %}
+                                    <tr>
+                                        <td>{{ docker.createdAt|date('d/m/Y - H:i:s') }}</td>
+                                        <td>{{ docker.user.email }}</td>
+                                        <td><a href=" {{ vich_uploader_asset(docker, 'dockerFile') }} "> Docker Archive {{ docker.number }}</a></td>
+                                        <td>{{ docker.dockerSize }}</td>
+                                        <td>
+                                            Todo
+                                        </td>
+                                        <td>
+                                            {% if docker.processed %}
+                                                <span class="badge bg-success">Yes</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">No</span>
+                                            {% endif %}
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        \
+        <section id="report" class="bg-white pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h2 class="display-3 underline mb-3">Download the Technical reports</h2>
+
+                        <p class="mb-2">
+                            The table below details the Technical reports submitted by participants:
+                        </p>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Report</th>
+                                <th scope="col">Size</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for report in reports %}
+                                <tr>
+                                    <td>{{ report.createdAt|date('d/m/Y - H:i:s') }}</td>
+                                    <td>{{ report.user.email }}</td>
+                                    <td><a href=" {{ vich_uploader_asset(report, 'reportFile') }} "> Technical report </a></td>
+                                    <td>{{ report.reportSize }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+{% endblock %}

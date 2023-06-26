@@ -275,10 +275,12 @@
                             {% else %}
                                 You have already submitted a technical report:
                                 <ul class="list-group mt-2 mb-2">
+                                    {% for report in app.user.reports %}
                                     <li class="list-group-item list-group-item-success">
-                                        <a href=" {{ vich_uploader_asset(app.user.reports|last, 'reportFile') }} "> Technical report </a>,
-                                uploaded on {{ app.user.reports|last.createdAt|date('d/m/Y - H:i:s') }}
+                                        <a href=" {{ vich_uploader_asset(report, 'reportFile') }} "> Technical report </a>,
+                                uploaded on {{ report.createdAt|date('d/m/Y - H:i:s') }}
                                     </li>
+                                    {%  endfor %}
                                 </ul>
                                 <div class="alert alert-primary text-primary mt-4">
                                     <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>

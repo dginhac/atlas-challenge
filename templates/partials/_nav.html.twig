@@ -30,6 +30,15 @@
                         <a class="nav-link" href="{{ path('app_challenge') }}">How to Participate?</a>
                     {% endif %}
                 </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    {% if route_name == "app_admin" %}
+                        <a class="nav-link active" aria-current="page" href="{{ path('app_admin') }}">Admin</a>
+                    {% else %}
+                        <a class="nav-link" href="{{ path('app_admin') }}">Admin</a>
+                    {% endif %}
+                </li>
+                {% endif %}
             </ul>
             {% if app.user %}
 
