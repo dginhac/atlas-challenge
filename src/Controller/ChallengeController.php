@@ -51,10 +51,9 @@ class ChallengeController extends AbstractController
                 return $this->redirectToRoute('app_challenge');
             }
 
-            $report = $this->entityManager->getRepository(Report::class)->findOneBy(['user' => $user]);
-            if (!$report) {
-                $report = new Report();
-            }
+
+            $report = new Report();
+            $report->setUser($user);
             $reportForm = $this->createForm(ReportType::class, $report, [
             ]);
             $reportForm->handleRequest($request);

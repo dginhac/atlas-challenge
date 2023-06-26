@@ -21,10 +21,6 @@ class Report
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToOne(inversedBy: 'technicalreport', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
 
     #[Vich\UploadableField(mapping: 'submission', fileNameProperty: 'reportName', size: 'reportSize')]
     private ?File $reportFile = null;
@@ -34,6 +30,10 @@ class Report
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $reportSize = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reports')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     #[ORM\PrePersist]
     public function prePersist(): void {
@@ -58,19 +58,6 @@ class Report
 
         return $this;
     }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -118,6 +105,17 @@ class Report
         return $this->reportSize;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 
 }
-

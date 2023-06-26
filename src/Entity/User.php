@@ -49,12 +49,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Docker::class)]
     private Collection $dockers;
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Report $report = null;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class)]
+    private Collection $reports;
 
     public function __construct()
     {
         $this->dockers = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,19 +231,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getReport(): ?Report
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
     {
-        return $this->report;
+        return $this->reports;
     }
 
-    public function setReport(Report $report): self
+    public function addReport(Report $report): self
     {
-        // set the owning side of the relation if necessary
-        if ($report->getUser() !== $this) {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
             $report->setUser($this);
         }
 
-        $this->report = $report;
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getUser() === $this) {
+                $report->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -191,7 +191,7 @@
                  class="bg-body-secondary pt-5 pt-lg-0 pb-5 pb-lg-0 border-bottom border-dark border-opacity-25">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8  p-5">
+                    <div class="col-lg-6  p-5">
                         <h2 class="underline mb-3">Upload your docker</h2>
                         <p class="mb-2">
                             Participants are invited to submit their contributions by uploading a Docker archive.
@@ -267,6 +267,24 @@
                             <a href="https://miccai-remia.github.io/">REMIA workshop</a>.
                         </p>
                         {% if app.user %}
+                            {% if app.user.reports|length == 0 %}
+                                <div class="alert alert-primary " role="alert">
+                                    <i class="fa-solid fa-circle-info me-3 fs-2"></i>
+                                    You have not yet submitted your technical report !
+                                </div>
+                            {% else %}
+                                You have already submitted a technical report:
+                                <ul class="list-group mt-2 mb-2">
+                                    <li class="list-group-item list-group-item-success">
+                                        <a href=" {{ vich_uploader_asset(app.user.reports|last, 'reportFile') }} "> Technical report </a>,
+                                uploaded on {{ app.user.reports|last.createdAt|date('d/m/Y - H:i:s') }}
+                                    </li>
+                                </ul>
+                                <div class="alert alert-primary text-primary mt-4">
+                                    <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
+                                    If you want to update your report, you can upload a new one !
+                                </div>
+                            {% endif %}
                             {{ form_start(reportForm, {
                                 'attr': {
                                     'novalidate': 'novalidate',
@@ -281,7 +299,7 @@
                         {% else %}
                         {% endif %}
                     </div>
-                    <div class="col-lg-4  img-bg img-h-20"
+                    <div class="col-lg-6  img-bg img-h-20"
                          style="background-image: url('{{ asset('build/images/submit.jpg') }}');">
                     </div>
                 </div>
