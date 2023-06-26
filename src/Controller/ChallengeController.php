@@ -83,7 +83,7 @@ class ChallengeController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $dataset = 'downloads/atlas-docker.zip';
-        return $this->file($dataset);
+        $docker = 'downloads/atlas-docker-1.0.1.zip';
+        return $this->file($docker);
     }
 }

@@ -26,7 +26,7 @@ class DatasetController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $dataset = 'downloads/atlas-train-dataset.zip';
+        $dataset = 'downloads/atlas-train-dataset-1.0.1.zip';
         return $this->file($dataset);
     }
 }
