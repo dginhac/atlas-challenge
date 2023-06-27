@@ -215,7 +215,7 @@
                                 <ul class="list-group mt-2 mb-2">
                                     {% for docker in app.user.dockers %}
                                         <li class="list-group-item list-group-item-success">
-                                            <a href=" {{ vich_uploader_asset(docker, 'dockerFile') }} "> Docker Archive {{ docker.number }}</a>,
+                                            <a href=" {{ vich_uploader_asset(docker, 'dockerFile') }} "> Docker Archive (version {{ docker.version }})</a>,
                                             uploaded on {{ docker.createdAt|date('d/m/Y - H:i:s') }}
                                         </li>
                                     {% endfor %}

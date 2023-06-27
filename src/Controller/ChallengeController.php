@@ -10,11 +10,13 @@ use App\Form\SubmissionType;
 use App\Form\DockerType;
 use App\Form\ReportType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ChallengeController extends AbstractController
@@ -25,6 +27,7 @@ class ChallengeController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route('/challenge', name: 'app_challenge')]
     public function challenge(Request $request,  MailerInterface $mailer):
     Response
@@ -41,12 +44,27 @@ class ChallengeController extends AbstractController
             ]);
             $dockerForm->handleRequest($request);
             if ($dockerForm->isSubmitted() && $dockerForm->isValid()) {
-                $docker->setNumber($user->getDockers()->count() + 1);
+                $docker->setVersion($user->getDockers()->count() + 1);
                 $this->entityManager->persist($docker);
                 $this->entityManager->flush();
+
+                // Send an email to the user
+                $email = (new TemplatedEmail())
+                    ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
+                    ->to($user->getEmail())
+                    ->addCc('atlas-challenge-l@u-bourgogne.fr')
+                    ->subject('Atlas Challenge: Your Docker Archive has been submitted.')
+                    ->textTemplate('emails/docker-has-been-submitted.txt.twig')
+                    ->htmlTemplate('emails/docker-has-been-submitted.html.twig')
+                    ->context(['user' => $user]);
+                $mailer->send($email);
+
                 $this->addFlash(
                     'success',
-                    'Your docker has been uploaded.'
+                    'Your docker has been uploaded. If your Docker archive is successfully validated on the 
+                    test dataset, you will automatically be notified by email when your evaluation metrics are 
+                    published on the leaderboard.
+'
                 );
                 return $this->redirectToRoute('app_challenge');
             }
@@ -68,9 +86,22 @@ class ChallengeController extends AbstractController
                 }
                 $this->entityManager->persist($report);
                 $this->entityManager->flush();
+
+                // Send an email to the user
+                $email = (new TemplatedEmail())
+                    ->from(new Address('dginhac@u-bourgogne.fr', 'Atlas Challenge'))
+                    ->to($user->getEmail())
+                    ->addCc('atlas-challenge-l@u-bourgogne.fr')
+                    ->subject('Atlas Challenge: Your Technical Report has been submitted.')
+                    ->textTemplate('emails/report-has-been-submitted.txt.twig')
+                    ->htmlTemplate('emails/report-has-been-submitted.html.twig')
+                    ->context(['user' => $user]);
+                $mailer->send($email);
+
                 $this->addFlash(
                     'success',
-                    'Your technical report has been uploaded.'
+                    'Your Technical Report has been uploaded. If necessary, you can revise and submit your 
+                    Technical Report as many times as necessary up to the deadline.'
                 );
                 return $this->redirectToRoute('app_challenge');
             }
