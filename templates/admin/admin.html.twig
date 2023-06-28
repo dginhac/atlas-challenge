@@ -61,8 +61,46 @@
                 </div>
             </div>
         </section>
-        \
-        <section id="report" class="bg-white pt-5 pb-5 border-bottom border-dark border-opacity-25">
+
+        <section id="docker" class="bg-white pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        {% include 'partials/_flash.html.twig' %}
+                        <h2 class="display-3 underline mb-3">Metrics with Ranking</h2>
+
+                        <p class="mb-2">
+                            The table below details the Metrics with ranking submitted by participants:
+                        </p>
+                        <table class="table table-striped text-center">
+                            <thead>
+                            <tr>
+                                <th scope="col">Rank</th>
+                                <th scope="col">Docker Id</th>
+                                <th scope="col">User</th>
+
+                                <th scope="col">Liver ASD (mm³)</th>
+                                <th scope="col">Liver Hausdorff Distance (mm³)</th>
+                                <th scope="col">Tumor ASD (mm³)</th>
+                                <th scope="col">Tumor Hausdorff Distance (mm³)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for finalRank in finalRanks %}
+                                <tr>
+                                    <td>#{{ loop.index }}</td>
+                                    <td>{{ finalRank }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="report" class="bg-body-secondary pt-5 pb-5 border-bottom border-dark border-opacity-25">
             <div class="container">
                 <div class="row ">
                     <div class="col-12">

@@ -7,6 +7,7 @@ use App\Entity\Metrics;
 use App\Entity\Report;
 use App\Entity\User;
 use App\Form\MetricsType;
+use App\Service\Data\Ranking;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,10 +30,76 @@ class AdminController extends AbstractController
         $dockers = $this->entityManager->getRepository(Docker::class)->findBy([], ['createdAt' => 'DESC']);
         $reports = $this->entityManager->getRepository(Report::class)->findBy([], ['createdAt' => 'DESC']);
 
+        $rawMetrics = $this->entityManager->getRepository(Metrics::class)->findAll();
+
+        foreach ($rawMetrics as $metrics) {
+            $liverASD[$metrics->getDocker()->getId()] = $metrics->getLiverASD();
+            $liverDice[$metrics->getDocker()->getId()] = $metrics->getLiverDice();
+            $liverHausdorffDistance[$metrics->getDocker()->getId()] = $metrics->getLiverHausdorffDistance();
+            $liverSurfaceDice[$metrics->getDocker()->getId()] = $metrics->getLiverSurfaceDice();
+            $tumorASD[$metrics->getDocker()->getId()] = $metrics->getTumorASD();
+            $tumorDice[$metrics->getDocker()->getId()] = $metrics->getTumorDice();
+            $tumorHausdorffDistance[$metrics->getDocker()->getId()] = $metrics->getTumorHausdorffDistance();
+            $tumorSurfaceDice[$metrics->getDocker()->getId()] = $metrics->getTumorSurfaceDice();
+            $rmse[$metrics->getDocker()->getId()] = $metrics->getRmse();
+
+            $allMetrics[$metrics->getDocker()->getId()] = [
+                $metrics->getLiverASD(),
+                $metrics->getLiverDice(),
+                $metrics->getLiverHausdorffDistance(),
+                $metrics->getLiverSurfaceDice(),
+                $metrics->getTumorASD(),
+                $metrics->getTumorDice(),
+                $metrics->getTumorHausdorffDistance(),
+                $metrics->getTumorSurfaceDice(),
+                $metrics->getRmse()];
+        }
+        $ranking = new Ranking();
+        $liverASDrank = $ranking->getRanking($liverASD, SORT_ASC);
+        $liverDiceRank = $ranking->getRanking($liverDice, SORT_DESC);
+        $liverHausdorffDistanceRank = $ranking->getRanking($liverHausdorffDistance, SORT_ASC);
+        $liverSurfaceDiceRank = $ranking->getRanking($liverSurfaceDice, SORT_DESC);
+        $tumorASDRank = $ranking->getRanking($tumorASD, SORT_ASC);
+        $tumorDiceRank = $ranking->getRanking($tumorDice, SORT_DESC);
+        $tumorHausdorffDistanceRank = $ranking->getRanking($tumorHausdorffDistance, SORT_ASC);
+        $tumorSurfaceDiceRank = $ranking->getRanking($tumorSurfaceDice, SORT_DESC);
+        $rmseRank = $ranking->getRanking($rmse, SORT_ASC);
+
+        $allMetricsRank = [
+            $liverASDrank,
+            $liverDiceRank,
+            $liverHausdorffDistanceRank,
+            $liverSurfaceDiceRank,
+            $tumorASDRank,
+            $tumorDiceRank,
+            $tumorHausdorffDistanceRank,
+            $tumorSurfaceDiceRank,
+            $rmseRank
+        ];
+
+        $rankSum = [];
+        foreach ($liverASDrank as $dockerId => $rank) {
+            $rankData[$dockerId] = array_column($allMetricsRank, $dockerId);
+            $rankSum[$dockerId] = array_sum($rankData[$dockerId]);
+        }
+
+        $finalRanks = $ranking->getRanking($rankSum, SORT_ASC);
+        asort($finalRanks);
+        $finalRanks = array_keys($finalRanks);
+
+
+        //dump($allMetrics);
+        //dump($allMetricsRank);
+        //dd($finalRanks);
+
         return $this->render('admin/admin.html.twig', [
             'title' => 'Admin zone',
             'dockers' => $dockers,
             'reports' => $reports,
+            'rawMetrics' => $rawMetrics,
+            'allMetrics' => $allMetrics,
+            'allMetricsRank' => $allMetricsRank,
+            'finalRanks' => $finalRanks,
         ]);
     }
 
@@ -63,53 +130,6 @@ class AdminController extends AbstractController
             $metrics->getDocker()->setProcessed(true);
             $this->entityManager->persist($metrics);
             //$this->entityManager->flush();
-
-            $allMetrics = $this->entityManager->getRepository(Metrics::class)->findAll();
-            dump($allMetrics);
-            foreach ($allMetrics as $metrics) {
-                $liverASD[$metrics->getDocker()->getId()] = $metrics->getLiverASD();
-                $liverDice[$metrics->getDocker()->getId()] = $metrics->getLiverDice();
-                $liverHausdorffDistance[$metrics->getDocker()->getId()] = $metrics->getLiverHausdorffDistance();
-                $liverSurfaceDice[$metrics->getDocker()->getId()] = $metrics->getLiverSurfaceDice();
-                $tumorASD[$metrics->getDocker()->getId()] = $metrics->getTumorASD();
-                $tumorDice[$metrics->getDocker()->getId()] = $metrics->getTumorDice();
-                $tumorHausdorffDistance[$metrics->getDocker()->getId()] = $metrics->getTumorHausdorffDistance();
-                $tumorSurfaceDice[$metrics->getDocker()->getId()] = $metrics->getTumorSurfaceDice();
-                $rmse[$metrics->getDocker()->getId()] = $metrics->getRmse();
-            }
-            $liverASDsort = $liverASD;
-            arsort($liverASDsort);
-            dump($liverASDsort);
-            $liverASDrank = array();
-            $rank = 0;
-            $lastValue = null;
-            foreach ($liverASDsort as $key => $value) {
-                if ($value != $lastValue) {
-                    $lastValue = $value;
-                    $rank++;
-                }
-                $liverASDrank[$key] = $rank;
-            }
-            dd($liverASDrank);
-            $liverDiceRank = $liverDice;
-            asort($liverDiceRank);
-            $liverHausdorffDistanceRank = $liverHausdorffDistance;
-            arsort($liverHausdorffDistanceRank);
-            $liverSurfaceDiceRank = $liverSurfaceDice;
-            asort($liverSurfaceDiceRank);
-            $tumorASDRank = $tumorASD;
-            arsort($tumorASDRank);
-            $tumorDiceRank = $tumorDice;
-            asort($tumorDiceRank);
-            $tumorHausdorffDistanceRank = $tumorHausdorffDistance;
-            arsort($tumorHausdorffDistanceRank);
-            $tumorSurfaceDiceRank = $tumorSurfaceDice;
-            asort($tumorSurfaceDiceRank);
-            $rmseRank = $rmse;
-            asort($rmseRank);
-
-            $allMetricsRank =
-
 
             $this->addFlash('success', 'Metrics file has been uploaded.');
             return $this->redirectToRoute('app_admin');
