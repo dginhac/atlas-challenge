@@ -21,30 +21,41 @@ class Metrics
 
     #[ORM\Column]
     private ?float $liverASD = null;
+    private ?int $liverASDRank = null;
 
     #[ORM\Column]
     private ?float $liverDice = null;
+    private ?int $liverDiceRank = null;
 
     #[ORM\Column]
     private ?float $liverHausdorffDistance = null;
+    private ?int $liverHausdorffDistanceRank = null;
 
     #[ORM\Column]
     private ?float $liverSurfaceDice = null;
+    private ?int $liverSurfaceDiceRank = null;
 
     #[ORM\Column]
     private ?float $tumorASD = null;
+    private ?int $tumorASDRank = null;
 
     #[ORM\Column]
     private ?float $tumorDice = null;
+    private ?int $tumorDiceRank = null;
 
     #[ORM\Column]
     private ?float $tumorHausdorffDistance = null;
+    private ?int $tumorHausdorffDistanceRank = null;
 
     #[ORM\Column]
     private ?float $tumorSurfaceDice = null;
+    private ?int $tumorSurfaceDiceRank = null;
 
     #[ORM\Column]
     private ?float $rmse = null;
+    private ?int $rmseRank = null;
+
+    private ?int $rank = null;
 
     #[ORM\OneToOne(inversedBy: 'metrics', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -76,9 +87,27 @@ class Metrics
         return $this;
     }
 
+    public function getLiverASDRank(): ?int
+    {
+        return $this->liverASDRank;
+    }
+
+
+    public function setLiverASDRank(int $liverASDRank): self
+    {
+        $this->liverASD = $liverASDRank;
+
+        return $this;
+    }
+
     public function getLiverDice(): ?float
     {
         return $this->liverDice;
+    }
+
+    public function getLiverDiceRank(): ?int
+    {
+        return $this->liverDiceRank;
     }
 
     public function setLiverDice(float $liverDice): self
@@ -87,10 +116,20 @@ class Metrics
 
         return $this;
     }
+    public function setLiverDiceRank(int $liverDiceRank): self
+    {
+        $this->liverDiceRank = $liverDiceRank;
+
+        return $this;
+    }
 
     public function getLiverHausdorffDistance(): ?float
     {
         return $this->liverHausdorffDistance;
+    }
+    public function getLiverHausdorffDistanceRank(): ?int
+    {
+        return $this->liverHausdorffDistanceRank;
     }
 
     public function setLiverHausdorffDistance(float $liverHausdorffDistance): self
@@ -99,10 +138,20 @@ class Metrics
 
         return $this;
     }
+    public function setLiverHausdorffDistanceRank(int $liverHausdorffDistanceRank): self
+    {
+        $this->liverHausdorffDistanceRank = $liverHausdorffDistanceRank;
+
+        return $this;
+    }
 
     public function getLiverSurfaceDice(): ?float
     {
         return $this->liverSurfaceDice;
+    }
+    public function getLiverSurfaceDiceRank(): ?int
+    {
+        return $this->liverSurfaceDiceRank;
     }
 
     public function setLiverSurfaceDice(float $liverSurfaceDice): self
@@ -111,10 +160,20 @@ class Metrics
 
         return $this;
     }
+    public function setLiverSurfaceDiceRank(int $liverSurfaceDiceRank): self
+    {
+        $this->liverSurfaceDiceRank = $liverSurfaceDiceRank;
+
+        return $this;
+    }
 
     public function getTumorASD(): ?float
     {
         return $this->tumorASD;
+    }
+    public function getTumorASDRank(): ?int
+    {
+        return $this->tumorASDRank;
     }
 
     public function setTumorASD(float $tumorASD): self
@@ -123,10 +182,20 @@ class Metrics
 
         return $this;
     }
+    public function setTumorASDRank(int $tumorASDRank): self
+    {
+        $this->tumorASDRank = $tumorASDRank;
+
+        return $this;
+    }
 
     public function getTumorDice(): ?float
     {
         return $this->tumorDice;
+    }
+    public function getTumorDiceRank(): ?int
+    {
+        return $this->tumorDiceRank;
     }
 
     public function setTumorDice(float $tumorDice): self
@@ -135,10 +204,20 @@ class Metrics
 
         return $this;
     }
+    public function setTumorDiceRank(int $tumorDiceRank): self
+    {
+        $this->tumorDiceRank = $tumorDiceRank;
+
+        return $this;
+    }
 
     public function getTumorHausdorffDistance(): ?float
     {
         return $this->tumorHausdorffDistance;
+    }
+    public function getTumorHausdorffDistanceRank(): ?int
+    {
+        return $this->tumorHausdorffDistanceRank;
     }
 
     public function setTumorHausdorffDistance(float $tumorHausdorffDistance): self
@@ -147,10 +226,20 @@ class Metrics
 
         return $this;
     }
+    public function setTumorHausdorffDistanceRank(int $tumorHausdorffDistanceRank): self
+    {
+        $this->tumorHausdorffDistanceRank = $tumorHausdorffDistanceRank;
+
+        return $this;
+    }
 
     public function getTumorSurfaceDice(): ?float
     {
         return $this->tumorSurfaceDice;
+    }
+    public function getTumorSurfaceDiceRank(): ?int
+    {
+        return $this->tumorSurfaceDiceRank;
     }
 
     public function setTumorSurfaceDice(float $tumorSurfaceDice): self
@@ -159,10 +248,20 @@ class Metrics
 
         return $this;
     }
+    public function setTumorSurfaceDiceRank(int $tumorSurfaceDiceRank): self
+    {
+        $this->tumorSurfaceDiceRank = $tumorSurfaceDiceRank;
+
+        return $this;
+    }
 
     public function getRmse(): ?float
     {
         return $this->rmse;
+    }
+    public function getRmseRank(): ?int
+    {
+        return $this->rmseRank;
     }
 
     public function setRmse(float $rmse): self
@@ -171,6 +270,25 @@ class Metrics
 
         return $this;
     }
+    public function setRmseRank(int $rmseRank): self
+    {
+        $this->rmseRank = $rmseRank;
+
+        return $this;
+    }
+
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function setRank(int $rank): self
+    {
+        $this->rank = $rank;
+
+        return $this;
+    }
+
 
     public function getDocker(): ?Docker
     {

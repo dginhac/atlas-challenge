@@ -31,6 +31,10 @@ class AdminController extends AbstractController
         $reports = $this->entityManager->getRepository(Report::class)->findBy([], ['createdAt' => 'DESC']);
 
         $rawMetrics = $this->entityManager->getRepository(Metrics::class)->findAll();
+        $rawMetricsById = [];
+        foreach ($rawMetrics as $metrics) {
+            $rawMetricsById[$metrics->getId()] = $metrics;
+        }
 
         $liverASD = [];
         $liverDice = [];
@@ -41,62 +45,86 @@ class AdminController extends AbstractController
         $tumorHausdorffDistance = [];
         $tumorSurfaceDice = [];
         $rmse = [];
-        $allMetrics = [];
 
-        foreach ($rawMetrics as $metrics) {
-            $liverASD[$metrics->getDocker()->getId()] = $metrics->getLiverASD();
-            $liverDice[$metrics->getDocker()->getId()] = $metrics->getLiverDice();
-            $liverHausdorffDistance[$metrics->getDocker()->getId()] = $metrics->getLiverHausdorffDistance();
-            $liverSurfaceDice[$metrics->getDocker()->getId()] = $metrics->getLiverSurfaceDice();
-            $tumorASD[$metrics->getDocker()->getId()] = $metrics->getTumorASD();
-            $tumorDice[$metrics->getDocker()->getId()] = $metrics->getTumorDice();
-            $tumorHausdorffDistance[$metrics->getDocker()->getId()] = $metrics->getTumorHausdorffDistance();
-            $tumorSurfaceDice[$metrics->getDocker()->getId()] = $metrics->getTumorSurfaceDice();
-            $rmse[$metrics->getDocker()->getId()] = $metrics->getRmse();
-
-            $allMetrics[$metrics->getDocker()->getId()] = [
-                $metrics->getLiverASD(),
-                $metrics->getLiverDice(),
-                $metrics->getLiverHausdorffDistance(),
-                $metrics->getLiverSurfaceDice(),
-                $metrics->getTumorASD(),
-                $metrics->getTumorDice(),
-                $metrics->getTumorHausdorffDistance(),
-                $metrics->getTumorSurfaceDice(),
-                $metrics->getRmse()];
+        foreach ($rawMetricsById as $id => $metrics) {
+            $liverASD[$id] = $metrics->getLiverASD();
+            $liverDice[$id] = $metrics->getLiverDice();
+            $liverHausdorffDistance[$id] = $metrics->getLiverHausdorffDistance();
+            $liverSurfaceDice[$id] = $metrics->getLiverSurfaceDice();
+            $tumorASD[$id] = $metrics->getTumorASD();
+            $tumorDice[$id] = $metrics->getTumorDice();
+            $tumorHausdorffDistance[$id] = $metrics->getTumorHausdorffDistance();
+            $tumorSurfaceDice[$id] = $metrics->getTumorSurfaceDice();
+            $rmse[$id] = $metrics->getRmse();
         }
+
         $ranking = new Ranking();
         $liverASDrank = $ranking->getRanking($liverASD, SORT_ASC);
+        foreach ($liverASDrank as $id => $rank) {
+            $rawMetricsById[$id]->setLiverASDRank($rank);
+        }
         $liverDiceRank = $ranking->getRanking($liverDice, SORT_DESC);
+        foreach ($liverDiceRank as $id => $rank) {
+            $rawMetricsById[$id]->setLiverDiceRank($rank);
+        }
         $liverHausdorffDistanceRank = $ranking->getRanking($liverHausdorffDistance, SORT_ASC);
+        foreach ($liverHausdorffDistanceRank as $id => $rank) {
+            $rawMetricsById[$id]->setLiverHausdorffDistanceRank($rank);
+        }
         $liverSurfaceDiceRank = $ranking->getRanking($liverSurfaceDice, SORT_DESC);
+        foreach ($liverSurfaceDiceRank as $id => $rank) {
+            $rawMetricsById[$id]->setLiverSurfaceDiceRank($rank);
+        }
         $tumorASDRank = $ranking->getRanking($tumorASD, SORT_ASC);
+        foreach ($tumorASDRank as $id => $rank) {
+            $rawMetricsById[$id]->setTumorASDRank($rank);
+        }
         $tumorDiceRank = $ranking->getRanking($tumorDice, SORT_DESC);
+        foreach ($tumorDiceRank as $id => $rank) {
+            $rawMetricsById[$id]->setTumorDiceRank($rank);
+        }
         $tumorHausdorffDistanceRank = $ranking->getRanking($tumorHausdorffDistance, SORT_ASC);
+        foreach ($tumorHausdorffDistanceRank as $id => $rank) {
+            $rawMetricsById[$id]->setTumorHausdorffDistanceRank($rank);
+        }
         $tumorSurfaceDiceRank = $ranking->getRanking($tumorSurfaceDice, SORT_DESC);
+        foreach ($tumorSurfaceDiceRank as $id => $rank) {
+            $rawMetricsById[$id]->setTumorSurfaceDiceRank($rank);
+        }
         $rmseRank = $ranking->getRanking($rmse, SORT_ASC);
+        foreach ($rmseRank as $id => $rank) {
+            $rawMetricsById[$id]->setRmseRank($rank);
+        }
+
+        dump ($rawMetricsById);
 
         $allMetricsRank = [
-            $liverASDrank,
-            $liverDiceRank,
-            $liverHausdorffDistanceRank,
-            $liverSurfaceDiceRank,
-            $tumorASDRank,
-            $tumorDiceRank,
-            $tumorHausdorffDistanceRank,
-            $tumorSurfaceDiceRank,
-            $rmseRank
+            'liverASDrank' => $liverASDrank,
+            'liverDiceRank' => $liverDiceRank,
+            'liverHausdorffDistanceRank' => $liverHausdorffDistanceRank,
+            'liverSurfaceDiceRank' => $liverSurfaceDiceRank,
+            'tumorASDRank' => $tumorASDRank,
+            'tumorDiceRank' => $tumorDiceRank,
+            'tumorHausdorffDistanceRank' => $tumorHausdorffDistanceRank,
+            'tumorSurfaceDiceRank' => $tumorSurfaceDiceRank,
+            'rmseRank' => $rmseRank
         ];
+
+        dump($allMetricsRank);
+
 
         $rankSum = [];
         foreach ($liverASDrank as $dockerId => $rank) {
             $rankData[$dockerId] = array_column($allMetricsRank, $dockerId);
             $rankSum[$dockerId] = array_sum($rankData[$dockerId]);
         }
+        dump($rankData);
+        dump($rankSum);
 
         $finalRanks = $ranking->getRanking($rankSum, SORT_ASC);
         asort($finalRanks);
         $finalRanks = array_keys($finalRanks);
+        dd($finalRanks);
 
 
         //dump($allMetrics);
