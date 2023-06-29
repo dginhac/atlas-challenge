@@ -32,6 +32,17 @@ class AdminController extends AbstractController
 
         $rawMetrics = $this->entityManager->getRepository(Metrics::class)->findAll();
 
+        $liverASD = [];
+        $liverDice = [];
+        $liverHausdorffDistance = [];
+        $liverSurfaceDice = [];
+        $tumorASD = [];
+        $tumorDice = [];
+        $tumorHausdorffDistance = [];
+        $tumorSurfaceDice = [];
+        $rmse = [];
+        $allMetrics = [];
+
         foreach ($rawMetrics as $metrics) {
             $liverASD[$metrics->getDocker()->getId()] = $metrics->getLiverASD();
             $liverDice[$metrics->getDocker()->getId()] = $metrics->getLiverDice();
