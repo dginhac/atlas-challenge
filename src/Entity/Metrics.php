@@ -11,6 +11,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: MetricsRepository::class)]
 #[Vich\Uploadable]
+#[ORM\HasLifecycleCallbacks]
+
 
 class Metrics
 {
@@ -70,6 +72,16 @@ class Metrics
     #[ORM\Column(type: 'integer')]
     private ?int $metricsSize = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\PrePersist]
+    public function prePersist(): void {
+        if(empty($this->createdAt)) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,7 +107,7 @@ class Metrics
 
     public function setLiverASDRank(int $liverASDRank): self
     {
-        $this->liverASD = $liverASDRank;
+        $this->liverASDRank = $liverASDRank;
 
         return $this;
     }
@@ -348,6 +360,18 @@ class Metrics
     public function getMetricsSize(): ?int
     {
         return $this->metricsSize;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
 
