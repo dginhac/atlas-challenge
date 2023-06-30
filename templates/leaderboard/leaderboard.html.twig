@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block nav %}
+    {{ include('partials/_nav.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    <main class="page-wrapper">
+        <section id="header" class="bg-white border-bottom border-dark border-opacity-25">
+            <img src="{{ asset('build/images/leaderboard.jpg') }}" class="img-fluid w-100" alt="">
+        </section>
+
+        <section id="leaderboard" class="bg-white pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        {% include 'partials/_flash.html.twig' %}
+                        <h2 class="display-3 underline mb-3">Leaderboard</h2>
+                        {% if leaderboard is empty %}
+                            <p class="mb-2">
+                                No data available at present.
+                            </p>
+                        {% else %}
+                            <p class="mb-2">
+                                The table below details each metric with its ranking in brackets.
+                            </p>
+                            {% set maxDate = date('2020-01-01') %}
+                            {% for metrics in leaderboard %}
+                                {% if metrics.createdAt > maxDate %}
+                                    {% set maxDate = metrics.createdAt %}
+                                {% endif %}
+                            {% endfor %}
+                            <p class="mb-2 fst-italic text-end">
+                                Last update: {{ maxDate|date('Y/m/d - H:i:s') }}
+                            </p>
+
+                            <table class="table table-striped text-center">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Rank</th>
+                                    <th scope="col">Docker Id</th>
+                                    <th scope="col">User</th>
+
+                                    <th scope="col">Liver ASD (mm<sup>3</sup>)</th>
+                                    <th scope="col">Liver Dice (%)</th>
+                                    <th scope="col">Liver Hausdorff Distance (mm<sup>3</sup>)</th>
+                                    <th scope="col">Liver Surface Dice (%)</th>
+                                    <th scope="col">Tumor ASD (mm<sup>3</sup>)</th>
+                                    <th scope="col">Tumor Dice (%)</th>
+                                    <th scope="col">Tumor Hausdorff Distance (mm<sup>3</sup>)</th>
+                                    <th scope="col">Tumor Surface Dice (%)</th>
+                                    <th scope="col">RMSE (%)</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for metrics in leaderboard %}
+                                    <tr>
+                                        <td>#{{ metrics.rank }}</td>
+                                        <td>{{ metrics.docker.id }}</td>
+                                        <td>{{ metrics.docker.user.email }}</td>
+                                        {% if metrics.liverASDRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.liverASD }}
+                                                (#{{ metrics.liverASDRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.liverASD }} (#{{ metrics.liverASDRank }})</td>
+                                        {% endif %}
+                                        {% if metrics.liverDiceRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.liverDice }}
+                                                (#{{ metrics.liverDiceRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.liverDice }} (#{{ metrics.liverDiceRank }})</td>
+                                        {% endif %}
+                                        {% if metrics.liverHausdorffDistanceRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.liverHausdorffDistance }}
+                                                (#{{ metrics.liverHausdorffDistanceRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.liverHausdorffDistance }}
+                                                (#{{ metrics.liverHausdorffDistanceRank }})
+                                            </td>
+                                        {% endif %}
+                                        {% if metrics.liverSurfaceDiceRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.liverSurfaceDice }}
+                                                (#{{ metrics.liverSurfaceDiceRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.liverSurfaceDice }} (#{{ metrics.liverSurfaceDiceRank }})
+                                            </td>
+                                        {% endif %}
+                                        {% if metrics.tumorASDRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.tumorASD }}
+                                                (#{{ metrics.tumorASDRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.tumorASD }} (#{{ metrics.tumorASDRank }})</td>
+                                        {% endif %}
+                                        {% if  metrics.tumorDiceRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.tumorDice }}
+                                                (#{{ metrics.tumorDiceRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.tumorDice }} (#{{ metrics.tumorDiceRank }})</td>
+                                        {% endif %}
+                                        {% if  metrics.tumorHausdorffDistanceRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.tumorHausdorffDistance }}
+                                                (#{{ metrics.tumorHausdorffDistanceRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.tumorHausdorffDistance }}
+                                                (#{{ metrics.tumorHausdorffDistanceRank }})
+                                            </td>
+                                        {% endif %}
+                                        {% if  metrics.tumorSurfaceDiceRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.tumorSurfaceDice }}
+                                                (#{{ metrics.tumorSurfaceDiceRank }})
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.tumorSurfaceDice }} (#{{ metrics.tumorSurfaceDiceRank }})
+                                            </td>
+                                        {% endif %}
+                                        {% if  metrics.rmseRank == 1 %}
+                                            <td class="fw-bold text-success">{{ metrics.rmse }} (#{{ metrics.rmseRank }}
+                                                )
+                                            </td>
+                                        {% else %}
+                                            <td>{{ metrics.rmse }} (#{{ metrics.rmseRank }})</td>
+                                        {% endif %}
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+{% endblock %}

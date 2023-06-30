@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block nav %}
+    {{ include('partials/_nav.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    <main class="page-wrapper">
+        <section id="header" class="bg-white border-bottom border-dark border-opacity-25">
+            <img src="{{ asset('build/images/admin-zone.jpg') }}" class="img-fluid w-100" alt="">
+        </section>
+        <section id="docker" class="bg-body-secondary pt-5 pb-5 border-bottom border-dark border-opacity-25">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        {% include 'partials/_flash.html.twig' %}
+                        <h2 class="display-3 underline mb-3">Upload a csv file</h2>
+
+                        {{ form_start(metricsForm, {
+                            'attr': {
+                                'novalidate': 'novalidate',
+                                'class':'needs-validation'
+                            }
+                        }) }}
+                        {{ form_row(metricsForm.metricsFile) }}
+                        <button type="submit" class="btn btn-primary btn-lg mt-2" id="upload">
+                            Upload your CSV file
+                        </button>
+                        {{ form_end(metricsForm) }}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+{% endblock %}

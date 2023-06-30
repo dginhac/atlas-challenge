@@ -5,8 +5,6 @@ namespace App\Entity;
 use App\Repository\DockerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-#use Vich\UploaderBundle\Entity\File;
-
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: DockerRepository::class)]
@@ -28,7 +26,7 @@ class Docker
     private ?User $user = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $number = null;
+    private ?int $version = null;
 
     #[Vich\UploadableField(mapping: 'submission', fileNameProperty: 'dockerName', size: 'dockerSize')]
     private ?File $dockerFile = null;
@@ -38,6 +36,12 @@ class Docker
 
     #[ORM\Column(type: 'integer')]
     private ?int $dockerSize = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $processed = null;
+
+    #[ORM\OneToOne(mappedBy: 'docker', cascade: ['persist', 'remove'])]
+    private ?Metrics $metrics = null;
 
     #[ORM\PrePersist]
     public function prePersist(): void {
@@ -74,14 +78,14 @@ class Docker
         return $this;
     }
 
-    public function getNumber(): ?int
+    public function getVersion(): ?int
     {
-        return $this->number;
+        return $this->version;
     }
 
-    public function setNumber(?int $number): self
+    public function setVersion(?int $version): self
     {
-        $this->number = $number;
+        $this->version = $version;
 
         return $this;
     }
@@ -130,5 +134,34 @@ class Docker
     public function getDockerSize(): ?int
     {
         return $this->dockerSize;
+    }
+
+    public function isProcessed(): ?bool
+    {
+        return $this->processed;
+    }
+
+    public function setProcessed(?bool $processed): self
+    {
+        $this->processed = $processed;
+
+        return $this;
+    }
+
+    public function getMetrics(): ?Metrics
+    {
+        return $this->metrics;
+    }
+
+    public function setMetrics(Metrics $metrics): self
+    {
+        // set the owning side of the relation if necessary
+        if ($metrics->getDocker() !== $this) {
+            $metrics->setDocker($this);
+        }
+
+        $this->metrics = $metrics;
+
+        return $this;
     }
 }
