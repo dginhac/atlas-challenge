@@ -128,6 +128,22 @@ class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/metrics/{id}/delete', name: 'app_admin_metrics_delete')]
+
+    public function delete_metrics(Metrics $metrics, Request $request) : Response {
+
+        $this->entityManager->remove($metrics);
+
+        $docker = $metrics->getDocker();
+        $docker->setProcessed(false);
+        $this->entityManager->persist($docker);
+
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'Docker ' . $metrics->getDocker()->getId() . ': Metrics have been deleted. You can now upload new metrics.');
+        return $this->redirectToRoute('app_admin');
+    }
+
     #[Route('/admin/docker/{id}/metrics', name: 'app_admin_metrics')]
     public function metrics(Docker $docker, Request $request) : Response
     {
