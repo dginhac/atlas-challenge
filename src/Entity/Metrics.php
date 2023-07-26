@@ -59,7 +59,7 @@ class Metrics
 
     private ?int $rank = null;
 
-    #[ORM\OneToOne(inversedBy: 'metrics', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'metrics')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Docker $docker = null;
 

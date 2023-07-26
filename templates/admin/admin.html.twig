@@ -115,6 +115,7 @@
                                     <th scope="col">Tumor Hausdorff Distance (mm<sup>3</sup>)</th>
                                     <th scope="col">Tumor Surface Dice (%)</th>
                                     <th scope="col">RMSE (%)</th>
+                                    <th scope="col">Delete</th>
 
                                 </tr>
                                 </thead>
@@ -193,6 +194,12 @@
                                         {% else %}
                                             <td>{{ metrics.rmse }} (#{{ metrics.rmseRank }})</td>
                                         {% endif %}
+
+                                        <td>
+                                            <a href="{{ path('app_admin_metrics_delete', {'id': metrics.id}) }}"
+                                               class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
 
                                     </tr>
                                 {% endfor %}
