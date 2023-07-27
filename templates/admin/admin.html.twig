@@ -31,6 +31,7 @@
                                 <th scope="col">Docker Revision</th>
                                 <th scope="col">Docker Size</th>
                                 <th scope="col">Upload metrics</th>
+                                <th scope="col">Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -47,11 +48,51 @@
                                     <td>
                                         {% if not docker.processed %}
                                             <a class="btn btn-primary btn-sm text-center"
-                                               href={{ path('app_admin_metrics', {id:docker.id}) }} role="button">
-                                                Upload a csv file</a>
+                                               href={{ path('app_admin_docker_metrics', {id:docker.id}) }} role="button">
+                                                Upload csv</a>
                                         {% else %}
                                             <span class="badge bg-success">Done</span>
                                         {% endif %}
+
+                                    </td>
+                                    <td>
+                                        {#
+                                        <a href="{{ path('app_admin_docker_delete', {'id': docker.id}) }}"
+                                           class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                        #}
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteDocker{{ docker.id }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="confirmDeleteDocker{{ docker.id }}" tabindex="-1" aria-labelledby="confirmDeleteDockerLabel{{ docker.id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="confirmDeleteDockerLabel{{ docker.id }}">Are you sure?</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <i class="text-danger fs-1 fa-solid fa-triangle-exclamation mb-3"></i>
+                                                        {%  if docker.metrics %}
+                                                        <p class="lead">Do you really want to delete  Docker container #{{ docker.id }} and associated Metrics #{{ docker.metrics.id }}?</p>
+                                                        {% else %}
+                                                        <p class="lead">Do you really want to delete  Docker container #{{ docker.id }}?</p>
+                                                        {% endif %}
+                                                        <p class="text-danger">
+                                                            This process cannot be undone.
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                                                        <a class="btn btn-danger" href="{{ path('app_admin_docker_delete', {'id': docker.id}) }}" role="button">Confirm Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </td>
                                 </tr>
@@ -93,8 +134,6 @@
                                 The table below details each metric with its ranking in brackets.
                             </p>
 
-
-
                             <p class="mb-2 fst-italic text-end">
                                 Last update: {{ maxDate|date('Y/m/d - H:i:s') }}
                             </p>
@@ -116,7 +155,6 @@
                                     <th scope="col">Tumor Surface Dice (%)</th>
                                     <th scope="col">RMSE (%)</th>
                                     <th scope="col">Delete</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -196,11 +234,34 @@
                                         {% endif %}
 
                                         <td>
-                                            <a href="{{ path('app_admin_metrics_delete', {'id': metrics.id}) }}"
-                                               class="btn btn-danger btn-sm">
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteMetrics{{ metrics.id }}">
                                                 <i class="fa-solid fa-trash"></i>
-                                            </a>
+                                            </button>
 
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="confirmDeleteMetrics{{ metrics.id }}" tabindex="-1" aria-labelledby="confirmDeleteMetricsLabel{{ metrics.id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="confirmDeleteMetricsLabel{{ metrics.id }}">Are you sure?</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <i class="text-danger fs-1 fa-solid fa-triangle-exclamation mb-3"></i>
+                                                            <p class="lead">Do you really want to delete Metrics from Docker container #{{ metrics.docker.id }}?</p>
+                                                            <p class="text-danger">
+                                                                This process cannot be undone.
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                                                            <a class="btn btn-danger" href="{{ path('app_admin_metrics_delete', {'id': metrics.id}) }}" role="button">Confirm Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
