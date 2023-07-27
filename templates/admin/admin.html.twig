@@ -31,6 +31,7 @@
                                 <th scope="col">Docker Revision</th>
                                 <th scope="col">Docker Size</th>
                                 <th scope="col">Upload metrics</th>
+                                <th scope="col">Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -47,12 +48,18 @@
                                     <td>
                                         {% if not docker.processed %}
                                             <a class="btn btn-primary btn-sm text-center"
-                                               href={{ path('app_admin_metrics', {id:docker.id}) }} role="button">
-                                                Upload a csv file</a>
+                                               href={{ path('app_admin_docker_metrics', {id:docker.id}) }} role="button">
+                                                Upload csv</a>
                                         {% else %}
                                             <span class="badge bg-success">Done</span>
                                         {% endif %}
 
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('app_admin_docker_delete', {'id': docker.id}) }}"
+                                           class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -29,7 +29,6 @@ class AdminController extends AbstractController
         return $a->getRank() > $b->getRank();
     }
 
-
     #[Route('/admin', name: 'app_admin')]
     public function index(Request $request): Response
     {
@@ -129,7 +128,6 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/metrics/{id}/delete', name: 'app_admin_metrics_delete')]
-
     public function delete_metrics(Metrics $metrics, Request $request) : Response {
 
         $this->entityManager->remove($metrics);
@@ -144,7 +142,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin');
     }
 
-    #[Route('/admin/docker/{id}/metrics', name: 'app_admin_metrics')]
+    #[Route('/admin/docker/{id}/metrics', name: 'app_admin_docker_metrics')]
     public function metrics(Docker $docker, Request $request) : Response
     {
         $metrics = new Metrics();
@@ -172,7 +170,7 @@ class AdminController extends AbstractController
             $this->entityManager->persist($metrics);
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Metrics file has been uploaded. ');
+            $this->addFlash('success', 'Docker ' . $metrics->getDocker()->getId() . ': Metrics have been uploaded. ');
             return $this->redirectToRoute('app_admin');
         }
         return $this->render('admin/metrics.html.twig', [
@@ -182,5 +180,16 @@ class AdminController extends AbstractController
         ]);
 
     }
+
+    #[Route('/admin/docker/{id}/delete', name: 'app_admin_docker_delete')]
+    public function delete_docker(Docker $docker, Request $request) : Response
+    {
+        $this->entityManager->remove($docker);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'Docker ' . $docker->getId() . ' has been deleted.');
+        return $this->redirectToRoute('app_admin');
+    }
+
 
 }
