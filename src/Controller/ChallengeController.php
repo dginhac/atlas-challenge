@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChallengeController extends AbstractController
 {
-    public const MAX_NUMBER_OF_SUBMISSIONS = 2;
+    public const MAX_NUMBER_OF_SUBMISSIONS = 3;
     private EntityManagerInterface $entityManager;
     public function __construct(EntityManagerInterface $entityManager)
     {
