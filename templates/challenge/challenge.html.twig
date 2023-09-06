@@ -208,7 +208,7 @@
                             {% if app.user.dockers|length == 0 %}
                                 <div class="alert alert-primary " role="alert">
                                     <i class="fa-solid fa-circle-info me-3 fs-2"></i>
-                                    You have not submitted yet. You can submit two contributions !
+                                    You have not submitted yet. You can submit three contributions !
                                 </div>
                             {% else %}
                                 You have already submitted {{ app.user.dockers|length }} time(s):
@@ -225,10 +225,16 @@
                             {% if app.user.dockers|length == 1 %}
                                 <div class="alert alert-primary text-primary mt-4">
                                     <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
-                                    You can submit another contribution !
+                                    You can submit two other contributions !
                                 </div>
                             {% endif %}
                             {% if app.user.dockers|length == 2 %}
+                                <div class="alert alert-danger text-danger mt-4">
+                                    <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
+                                    You can submit another contribution !
+                                </div>
+                            {% endif %}
+                            {% if app.user.dockers|length == 3 %}
                                 <div class="alert alert-danger text-danger mt-4">
                                     <i class="fa-solid fa-triangle-exclamation me-3 fs-2"></i>
                                     You can no longer submit new contributions !
@@ -236,7 +242,7 @@
                             {% endif %}
 
 
-                            {% if app.user.dockers|length != 2 %}
+                            {% if app.user.dockers|length != 3 %}
                                 {{ form_start(dockerForm, {
                                     'attr': {
                                         'novalidate': 'novalidate',
